@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="257dp"
         android:layout_height="103dp"
-        android:text="Hello World!"
+        android:text="Hola mama pinga"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
