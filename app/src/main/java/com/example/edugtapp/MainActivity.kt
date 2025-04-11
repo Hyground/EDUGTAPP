@@ -19,6 +19,12 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        println("este es una prueeba ------------------------------------------")
+        println("este es una prueeba ------------------------------------------")
+        println("este es una prueeba ------------------------------------------")
+        println("este es una prueeba ------------------------------------------")
+
+
         println("Hola mundo")
 
     }
