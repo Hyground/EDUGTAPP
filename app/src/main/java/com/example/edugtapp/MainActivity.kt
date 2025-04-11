@@ -17,6 +17,15 @@ class MainActivity : AppCompatActivity() {
         println("este es una prueeba ------------------------------------------")
         println("este es una prueeba ------------------------------------------")
 
+        println("este es una comic Miguel ------------------------------------------")
+
+
+        var numero = 10
+        var numero2 = 20
+        var resul = numero + numero2
+
+
+
 
 
         println("este es una prueeba ------------------------------------------")
@@ -27,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         println("Hola mundo")
         println("Hola mundopequeño commit mio frank")
+
 
     }
 }
