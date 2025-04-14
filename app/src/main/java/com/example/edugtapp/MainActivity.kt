@@ -2,7 +2,6 @@ package com.example.edugtapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mostrarCarga(true)
-        tvResultado.text = "" // Limpia mensaje anterior
+        tvResultado.text = ""
 
         loginService.login(
             usuario,
@@ -72,15 +71,17 @@ class MainActivity : AppCompatActivity() {
     private fun procesarRespuesta(respuesta: String) {
         try {
             val json = JSONObject(respuesta)
+
             val nombreCompleto = json.optString("nombreCompleto", null)
+            val nombreGrado = json.optJSONObject("grado")?.optString("nombre") ?: ""
+            val nombreSeccion = json.optJSONObject("seccion")?.optString("nombre") ?: ""
 
             if (nombreCompleto != null) {
-                irAMenu(nombreCompleto)
+                irAMenu(nombreCompleto, nombreGrado, nombreSeccion)
             } else {
                 mostrarMensaje("Respuesta inesperada del servidor")
             }
         } catch (e: Exception) {
-            Log.e("LoginDebug", "Error al procesar JSON: ${e.message}")
             mostrarMensaje("Error procesando la respuesta del servidor")
         }
     }
@@ -94,9 +95,11 @@ class MainActivity : AppCompatActivity() {
         btnLogin.isEnabled = !cargando
     }
 
-    private fun irAMenu(nombre: String) {
+    private fun irAMenu(nombre: String, grado: String, seccion: String) {
         startActivity(Intent(this, MenuActivity::class.java).apply {
             putExtra("NOMBRE_DOCENTE", nombre)
+            putExtra("GRADO_DOCENTE", grado)
+            putExtra("SECCION_DOCENTE", seccion)
         })
         finish()
     }

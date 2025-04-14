@@ -29,6 +29,8 @@
         <activity
             android:name=".ui.MenuActivity"
             android:exported="false" />
+        <activity android:name=".ui.RegistrarAlumnoActivity" />
+
     </application>
 
 </manifest>

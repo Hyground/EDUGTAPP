@@ -1,5 +1,6 @@
 package com.example.edugtapp.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -12,7 +13,10 @@ class MenuActivity : AppCompatActivity() {
         setContentView(R.layout.activity_menu)
 
         val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
-        val nombreDocente = intent.getStringExtra("NOMBRE_DOCENTE")
+        val nombreDocente = intent.getStringExtra("NOMBRE_DOCENTE") ?: "-"
+        val gradoDocente = intent.getStringExtra("GRADO_DOCENTE") ?: "-"
+        val seccionDocente = intent.getStringExtra("SECCION_DOCENTE") ?: "-"
+
         tvBienvenida.text = "Bienvenido, $nombreDocente"
 
         val btnRegistrarAlumnos = findViewById<Button>(R.id.btnRegistrarAlumnos)
@@ -20,7 +24,12 @@ class MenuActivity : AppCompatActivity() {
         val btnRegistrarNotas = findViewById<Button>(R.id.btnRegistrarNotas)
 
         btnRegistrarAlumnos.setOnClickListener {
-            // TODO: lanzar actividad de registro de alumnos
+            val intent = Intent(this, RegistrarAlumnoActivity::class.java).apply {
+                putExtra("NOMBRE_DOCENTE", nombreDocente)
+                putExtra("GRADO_DOCENTE", gradoDocente)
+                putExtra("SECCION_DOCENTE", seccionDocente)
+            }
+            startActivity(intent)
         }
 
         btnCrearActividades.setOnClickListener {
