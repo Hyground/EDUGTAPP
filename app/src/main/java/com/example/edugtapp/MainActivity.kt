@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             Multiplicación: $multiplicacion
             División: $division
             """.trimIndent()
-
+        println(" El resultado es : $resultado")
 
     }
 }
