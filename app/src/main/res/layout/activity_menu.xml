@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menuLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvBienvenida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bienvenido"
+        android:textSize="20sp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnRegistrarAlumnos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrar Alumnos" />
+
+    <Button
+        android:id="@+id/btnCrearActividades"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Crear Actividades"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnRegistrarNotas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrar Notas"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

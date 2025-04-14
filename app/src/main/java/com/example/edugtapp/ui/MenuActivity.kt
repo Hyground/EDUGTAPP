@@ -1,0 +1,34 @@
+package com.example.edugtapp.ui
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.edugtapp.R
+
+class MenuActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_menu)
+
+        val tvBienvenida = findViewById<TextView>(R.id.tvBienvenida)
+        val nombreDocente = intent.getStringExtra("NOMBRE_DOCENTE")
+        tvBienvenida.text = "Bienvenido, $nombreDocente"
+
+        val btnRegistrarAlumnos = findViewById<Button>(R.id.btnRegistrarAlumnos)
+        val btnCrearActividades = findViewById<Button>(R.id.btnCrearActividades)
+        val btnRegistrarNotas = findViewById<Button>(R.id.btnRegistrarNotas)
+
+        btnRegistrarAlumnos.setOnClickListener {
+            // TODO: lanzar actividad de registro de alumnos
+        }
+
+        btnCrearActividades.setOnClickListener {
+            // TODO: lanzar actividad de creación de actividades
+        }
+
+        btnRegistrarNotas.setOnClickListener {
+            // TODO: lanzar actividad de registro de notas
+        }
+    }
+}
