@@ -24,10 +24,6 @@ class MainActivity : AppCompatActivity() {
         var numero2 = 20
         var resul = numero + numero2
 
-
-
-
-
         println("este es una prueeba ------------------------------------------")
         println("este es una prueeba ------------------------------------------")
         println("este es una prueeba ------------------------------------------")
@@ -36,6 +32,28 @@ class MainActivity : AppCompatActivity() {
 
         println("Hola mundo")
         println("Hola mundopequeño commit mio frank")
+
+        //Commit Alonzo
+        var num1 = 15
+        var num2 = 3
+
+        var suma = num1 + num2
+        var resta = num1 - num2
+        var multiplicacion = num1 * num2
+        var division = num1 / num2
+
+        println("Suma: $suma")
+        println("Resta: $resta")
+        println("Multiplicación: $multiplicacion")
+        println("División: $division")
+
+        var resultado = """
+            Números: $num1 y $num2
+            Suma: $suma
+            Resta: $resta
+            Multiplicación: $multiplicacion
+            División: $division
+            """.trimIndent()
 
 
     }
