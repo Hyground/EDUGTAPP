@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,5 +59,36 @@ class MainActivity : AppCompatActivity() {
 
         println("Commit de prueba de Iván")
 
+
+
+            // Solo prueba Iván xd
+
+        val n1 = 10.0
+        val n2 = 5.0
+
+        Log.d("Calculadora", "Suma: ${sumar(n1, n2)}")
+        Log.d("Calculadora", "Resta: ${restar(n1, n2)}")
+        Log.d("Calculadora", "Multiplicación: ${multiplicar(n1, n2)}")
+        Log.d("Calculadora", "División: ${dividir(n1, n2)}")
+    }
+
+    fun sumar(a: Double, b: Double): Double {
+        return a + b
+    }
+
+    fun restar(a: Double, b: Double): Double {
+        return a - b
+    }
+
+    fun multiplicar(a: Double, b: Double): Double {
+        return a * b
+    }
+
+    fun dividir(a: Double, b: Double): Double {
+        return if (b != 0.0) {
+            a / b
+        } else {
+            Double.NaN // No se puede dividir entre cerooooo
+        }
     }
 }
