@@ -1,12 +1,16 @@
 package com.example.edugtapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import okhttp3.*
+import org.json.JSONArray
+import java.io.IOException
 
 class RegistrarAlumnoActivity : AppCompatActivity() {
 
@@ -24,6 +28,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
     private lateinit var btnCancelar: Button
 
     private val estudiantes = mutableListOf<String>()
+    private lateinit var adapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +36,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
 
         val grado = intent.getStringExtra("GRADO_DOCENTE") ?: "-"
         val seccion = intent.getStringExtra("SECCION_DOCENTE") ?: "-"
+        val docenteId = intent.getIntExtra("DOCENTE_ID", -1)
 
         tvGrado = findViewById(R.id.tvGrado)
         tvSeccion = findViewById(R.id.tvSeccion)
@@ -41,7 +47,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         listaEstudiantes = findViewById(R.id.listaEstudiantes)
         fabAgregar = findViewById(R.id.fabAgregar)
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, estudiantes)
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, estudiantes)
         listaEstudiantes.adapter = adapter
 
         fabAgregar.setOnClickListener {
@@ -50,7 +56,13 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
 
         listaEstudiantes.setOnItemClickListener { _, _, position, _ ->
             val alumno = estudiantes[position]
-            mostrarDialogoOpciones(alumno, position, adapter)
+            mostrarDialogoOpciones(alumno, position)
+        }
+
+        if (docenteId != -1) {
+            obtenerEstudiantes(docenteId)
+        } else {
+            Toast.makeText(this, "ID de docente inválido", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -67,7 +79,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         btnGuardar.setOnClickListener {
             val nuevo = "${edtNombre.text} ${edtApellido.text}"
             estudiantes.add(nuevo)
-            (listaEstudiantes.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
             limpiarCampos()
             formulario.visibility = View.GONE
         }
@@ -85,12 +97,12 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         edtApellido.text.clear()
     }
 
-    private fun mostrarDialogoOpciones(nombre: String, index: Int, adapter: ArrayAdapter<String>) {
+    private fun mostrarDialogoOpciones(nombre: String, index: Int) {
         AlertDialog.Builder(this)
             .setTitle("Opciones para $nombre")
             .setItems(arrayOf("Actualizar", "Eliminar", "Cancelar")) { dialog, which ->
                 when (which) {
-                    0 -> {} // Actualizar pendiente
+                    0 -> Toast.makeText(this, "Funcionalidad en desarrollo", Toast.LENGTH_SHORT).show()
                     1 -> {
                         estudiantes.removeAt(index)
                         adapter.notifyDataSetChanged()
@@ -99,5 +111,50 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun obtenerEstudiantes(docenteId: Int) {
+        val url = "https://eduapi-production.up.railway.app/api/estudiantes/por-docente/$docenteId"
+        val request = Request.Builder().url(url).build()
+
+        OkHttpClient().newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    Toast.makeText(this@RegistrarAlumnoActivity, "Error al conectar con la API", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body?.string()
+                    Log.d("RegistrarAlumno", "Respuesta JSON: $responseBody")
+                    responseBody?.let { json ->
+                        try {
+                            val jsonArray = JSONArray(json)
+                            estudiantes.clear()
+                            for (i in 0 until jsonArray.length()) {
+                                val estudiante = jsonArray.getJSONObject(i)
+                                val nombre = estudiante.optString("nombre") + " " + estudiante.optString("apellido")
+                                estudiantes.add(nombre)
+                            }
+                            runOnUiThread {
+                                Log.d("RegistrarAlumno", "Total estudiantes: ${estudiantes.size}")
+                                adapter.notifyDataSetChanged()
+                                Toast.makeText(this@RegistrarAlumnoActivity, "${estudiantes.size} estudiantes cargados", Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: Exception) {
+                            runOnUiThread {
+                                Toast.makeText(this@RegistrarAlumnoActivity, "Error al procesar estudiantes", Toast.LENGTH_SHORT).show()
+                            }
+                            Log.e("RegistrarAlumno", "Error procesando JSON", e)
+                        }
+                    }
+                } else {
+                    runOnUiThread {
+                        Toast.makeText(this@RegistrarAlumnoActivity, "No se pudo obtener estudiantes", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
     }
 }

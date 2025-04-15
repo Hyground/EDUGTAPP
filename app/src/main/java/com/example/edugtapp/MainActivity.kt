@@ -73,11 +73,12 @@ class MainActivity : AppCompatActivity() {
             val json = JSONObject(respuesta)
 
             val nombreCompleto = json.optString("nombreCompleto", null)
+            val usuarioID = json.optInt("usuarioID", -1) // <- ¡Este es el DocenteId correcto!
             val nombreGrado = json.optJSONObject("grado")?.optString("nombre") ?: ""
             val nombreSeccion = json.optJSONObject("seccion")?.optString("nombre") ?: ""
 
-            if (nombreCompleto != null) {
-                irAMenu(nombreCompleto, nombreGrado, nombreSeccion)
+            if (nombreCompleto != null && usuarioID != -1) {
+                irAMenu(nombreCompleto, nombreGrado, nombreSeccion, usuarioID)
             } else {
                 mostrarMensaje("Respuesta inesperada del servidor")
             }
@@ -85,6 +86,19 @@ class MainActivity : AppCompatActivity() {
             mostrarMensaje("Error procesando la respuesta del servidor")
         }
     }
+
+    private fun irAMenu(nombre: String, grado: String, seccion: String, usuarioID: Int) {
+        startActivity(Intent(this, MenuActivity::class.java).apply {
+            putExtra("NOMBRE_DOCENTE", nombre)
+            putExtra("GRADO_DOCENTE", grado)
+            putExtra("SECCION_DOCENTE", seccion)
+            putExtra("DOCENTE_ID", usuarioID) // <- Correcto
+        })
+        finish()
+    }
+
+
+
 
     private fun mostrarMensaje(mensaje: String) {
         tvResultado.text = mensaje
@@ -95,12 +109,4 @@ class MainActivity : AppCompatActivity() {
         btnLogin.isEnabled = !cargando
     }
 
-    private fun irAMenu(nombre: String, grado: String, seccion: String) {
-        startActivity(Intent(this, MenuActivity::class.java).apply {
-            putExtra("NOMBRE_DOCENTE", nombre)
-            putExtra("GRADO_DOCENTE", grado)
-            putExtra("SECCION_DOCENTE", seccion)
-        })
-        finish()
-    }
 }

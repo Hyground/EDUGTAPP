@@ -46,12 +46,13 @@
     <ListView
         android:id="@+id/listaEstudiantes"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_below="@id/headerInfo"
         android:layout_above="@id/formulario"
         android:layout_marginTop="12dp"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp" />
+
 
     <!-- Formulario oculto -->
     <LinearLayout

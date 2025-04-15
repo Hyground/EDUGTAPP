@@ -22,15 +22,18 @@ class MenuActivity : AppCompatActivity() {
         val btnRegistrarAlumnos = findViewById<Button>(R.id.btnRegistrarAlumnos)
         val btnCrearActividades = findViewById<Button>(R.id.btnCrearActividades)
         val btnRegistrarNotas = findViewById<Button>(R.id.btnRegistrarNotas)
+        val docenteId = intent.getIntExtra("DOCENTE_ID", -1)
 
         btnRegistrarAlumnos.setOnClickListener {
             val intent = Intent(this, RegistrarAlumnoActivity::class.java).apply {
                 putExtra("NOMBRE_DOCENTE", nombreDocente)
                 putExtra("GRADO_DOCENTE", gradoDocente)
                 putExtra("SECCION_DOCENTE", seccionDocente)
+                putExtra("DOCENTE_ID", docenteId)
             }
             startActivity(intent)
         }
+
 
         btnCrearActividades.setOnClickListener {
             // TODO: lanzar actividad de creación de actividades
