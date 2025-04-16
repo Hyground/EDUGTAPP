@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.R
+import com.example.edugtapp.MainActivity
 
 class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +39,19 @@ class MenuActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btnRegistrarNotas).setOnClickListener {
             // TODO: Implementar registro de notas
+        }
+
+        // 🔐 Botón cerrar sesión con limpieza de datos
+        findViewById<Button>(R.id.btnCerrarSesion).setOnClickListener {
+            // Limpiar preferencias (si se usaron)
+            val prefs = getSharedPreferences("eduPrefs", MODE_PRIVATE)
+            prefs.edit().clear().apply()
+
+            // Volver al login
+            val intent = Intent(this@MenuActivity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
         }
     }
 }
