@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.R
+import com.example.edugtapp.network.Estudiante
 import com.example.edugtapp.network.EstudianteService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -25,7 +26,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
     private lateinit var btnGuardar: Button
     private lateinit var btnCancelar: Button
 
-    private val estudiantes = mutableListOf<String>()
+    private val estudiantes = mutableListOf<Estudiante>()
     private lateinit var adapter: BaseAdapter
     private var itemExpandido = -1
     private var indexEnEdicion = -1
@@ -71,19 +72,18 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                 val btnEliminar = view.findViewById<Button>(R.id.btnEliminar)
                 val rootItem = view as LinearLayout
 
-                val datos = estudiantes[position].split("\n")
-                tvLinea1.text = datos.getOrNull(0) ?: ""
-                tvLinea2.text = datos.getOrNull(1) ?: ""
-                tvLinea3.text = datos.getOrNull(2) ?: ""
+                val estudiante = estudiantes[position]
+                tvLinea1.text = "${estudiante.nombre} ${estudiante.apellido}"
+                tvLinea2.text = "Código: ${estudiante.codigo}"
+                tvLinea3.text = "CUI No.: ${estudiante.cui}"
 
                 opcionesLayout.visibility = if (position == itemExpandido) View.VISIBLE else View.GONE
-
-                // 🔘 Cambiar color de fondo al estar expandido
-                if (position == itemExpandido) {
-                    rootItem.setBackgroundResource(R.drawable.bg_estudiante_card_selected)
-                } else {
-                    rootItem.setBackgroundResource(R.drawable.bg_estudiante_card)
-                }
+                rootItem.setBackgroundResource(
+                    if (position == itemExpandido)
+                        R.drawable.bg_estudiante_card_selected
+                    else
+                        R.drawable.bg_estudiante_card
+                )
 
                 view.setOnClickListener {
                     itemExpandido = if (itemExpandido == position) -1 else position
@@ -93,7 +93,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                 }
 
                 btnActualizar.setOnClickListener {
-                    cargarFormularioDesdeTexto(estudiantes[position])
+                    cargarFormularioDesdeEstudiante(estudiante)
                     indexEnEdicion = position
                     formulario.visibility = View.VISIBLE
                     fabAgregar.visibility = View.GONE
@@ -120,11 +120,16 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         }
 
         btnGuardar.setOnClickListener {
-            val nuevoTexto = "${edtNombre.text} ${edtApellido.text}\nCódigo: ${edtCodigo.text}\nCUI No.: ${edtCui.text}"
+            val nuevoEstudiante = Estudiante(
+                nombre = edtNombre.text.toString(),
+                apellido = edtApellido.text.toString(),
+                codigo = edtCodigo.text.toString(),
+                cui = edtCui.text.toString()
+            )
             if (indexEnEdicion != -1) {
-                estudiantes[indexEnEdicion] = nuevoTexto
+                estudiantes[indexEnEdicion] = nuevoEstudiante
             } else {
-                estudiantes.add(nuevoTexto)
+                estudiantes.add(nuevoEstudiante)
             }
             adapter.notifyDataSetChanged()
             formulario.visibility = View.GONE
@@ -153,16 +158,11 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         indexEnEdicion = -1
     }
 
-    private fun cargarFormularioDesdeTexto(texto: String) {
-        val lineas = texto.split("\n")
-        val nombreCompleto = lineas.getOrNull(0)?.split(" ") ?: listOf("", "")
-        val codigo = lineas.getOrNull(1)?.removePrefix("Código: ") ?: ""
-        val cui = lineas.getOrNull(2)?.removePrefix("CUI No.: ") ?: ""
-
-        edtNombre.setText(nombreCompleto.firstOrNull() ?: "")
-        edtApellido.setText(nombreCompleto.drop(1).joinToString(" "))
-        edtCodigo.setText(codigo)
-        edtCui.setText(cui)
+    private fun cargarFormularioDesdeEstudiante(estudiante: Estudiante) {
+        edtNombre.setText(estudiante.nombre)
+        edtApellido.setText(estudiante.apellido)
+        edtCodigo.setText(estudiante.codigo)
+        edtCui.setText(estudiante.cui)
     }
 
     private fun limpiarCampos() {
