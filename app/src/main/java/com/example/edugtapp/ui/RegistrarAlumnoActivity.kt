@@ -133,7 +133,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                         runOnUiThread {
                             if (exito) {
                                 estudiantes.removeAt(position)
-                                Toast.makeText(this@RegistrarAlumnoActivity, "Estudiante desactivado", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@RegistrarAlumnoActivity, "Estudiante retirado", Toast.LENGTH_SHORT).show()
                             } else {
                                 Toast.makeText(this@RegistrarAlumnoActivity, "Error: $mensaje", Toast.LENGTH_LONG).show()
                             }
