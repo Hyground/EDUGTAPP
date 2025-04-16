@@ -1,9 +1,7 @@
 package com.example.edugtapp.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.R
@@ -18,7 +16,6 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
     private lateinit var listaEstudiantes: ListView
     private lateinit var formulario: View
     private lateinit var fabAgregar: FloatingActionButton
-
     private lateinit var edtCui: EditText
     private lateinit var edtCodigo: EditText
     private lateinit var edtNombre: EditText
@@ -30,7 +27,6 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
     private lateinit var adapter: BaseAdapter
     private var itemExpandido = -1
     private var indexEnEdicion = -1
-
     private var gradoId: Int = 0
     private var seccionId: Int = 0
 
@@ -38,11 +34,12 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_alumno)
 
+        gradoId = intent.getIntExtra("GRADO_ID", 0)
+        seccionId = intent.getIntExtra("SECCION_ID", 0)
+
         val grado = intent.getStringExtra("GRADO_DOCENTE") ?: "-"
         val seccion = intent.getStringExtra("SECCION_DOCENTE") ?: "-"
         val docenteId = intent.getIntExtra("DOCENTE_ID", -1)
-        gradoId = intent.getIntExtra("GRADO_ID", 0)
-        seccionId = intent.getIntExtra("SECCION_ID", 0)
 
         tvGrado = findViewById(R.id.tvGrado)
         tvSeccion = findViewById(R.id.tvSeccion)
@@ -64,9 +61,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         listaEstudiantes.adapter = adapter
 
         fabAgregar.setOnClickListener { mostrarFormularioParaNuevo() }
-
         btnGuardar.setOnClickListener { guardarOActualizarEstudiante() }
-
         btnCancelar.setOnClickListener {
             limpiarCampos()
             formulario.visibility = View.GONE
@@ -74,42 +69,30 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
             indexEnEdicion = -1
         }
 
-        if (docenteId != -1) {
-            cargarEstudiantes(docenteId)
-        } else {
-            Toast.makeText(this, "ID de docente inválido", Toast.LENGTH_LONG).show()
-        }
+        if (docenteId != -1) cargarEstudiantes(docenteId)
     }
 
     private fun inicializarAdapter() {
         adapter = object : BaseAdapter() {
-            override fun getCount(): Int = estudiantes.size
-            override fun getItem(position: Int): Any = estudiantes[position]
-            override fun getItemId(position: Int): Long = position.toLong()
+            override fun getCount() = estudiantes.size
+            override fun getItem(position: Int) = estudiantes[position]
+            override fun getItemId(position: Int) = position.toLong()
 
             override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-                val view = convertView ?: LayoutInflater.from(this@RegistrarAlumnoActivity)
-                    .inflate(R.layout.list_item_estudiante, parent, false)
-
-                val tvLinea1 = view.findViewById<TextView>(R.id.tvLinea1)
-                val tvLinea2 = view.findViewById<TextView>(R.id.tvLinea2)
-                val tvLinea3 = view.findViewById<TextView>(R.id.tvLinea3)
-                val opcionesLayout = view.findViewById<LinearLayout>(R.id.opcionesLayout)
-                val btnActualizar = view.findViewById<Button>(R.id.btnActualizar)
-                val btnEliminar = view.findViewById<Button>(R.id.btnEliminar)
-                val rootItem = view as LinearLayout
-
+                val view = convertView ?: layoutInflater.inflate(R.layout.list_item_estudiante, parent, false)
                 val estudiante = estudiantes[position]
-                tvLinea1.text = "${estudiante.nombre} ${estudiante.apellido}"
-                tvLinea2.text = "Código: ${estudiante.codigo}"
-                tvLinea3.text = "CUI No.: ${estudiante.cui}"
+
+                view.findViewById<TextView>(R.id.tvLinea1).text = "${estudiante.nombre} ${estudiante.apellido}"
+                view.findViewById<TextView>(R.id.tvLinea2).text = "Código: ${estudiante.codigo}"
+                view.findViewById<TextView>(R.id.tvLinea3).text = "CUI No.: ${estudiante.cui}"
+
+                val opcionesLayout = view.findViewById<LinearLayout>(R.id.opcionesLayout)
+                val rootItem = view as LinearLayout
 
                 opcionesLayout.visibility = if (position == itemExpandido) View.VISIBLE else View.GONE
                 rootItem.setBackgroundResource(
-                    if (position == itemExpandido)
-                        R.drawable.bg_estudiante_card_selected
-                    else
-                        R.drawable.bg_estudiante_card
+                    if (position == itemExpandido) R.drawable.bg_estudiante_card_selected
+                    else R.drawable.bg_estudiante_card
                 )
 
                 view.setOnClickListener {
@@ -119,7 +102,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                     notifyDataSetChanged()
                 }
 
-                btnActualizar.setOnClickListener {
+                view.findViewById<Button>(R.id.btnActualizar).setOnClickListener {
                     cargarFormularioDesdeEstudiante(estudiante)
                     indexEnEdicion = position
                     formulario.visibility = View.VISIBLE
@@ -128,7 +111,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                     notifyDataSetChanged()
                 }
 
-                btnEliminar.setOnClickListener {
+                view.findViewById<Button>(R.id.btnEliminar).setOnClickListener {
                     EstudianteService.desactivarEstudiante(estudiante.cui) { exito, mensaje ->
                         runOnUiThread {
                             if (exito) {
@@ -170,10 +153,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(this, "Error: $mensaje", Toast.LENGTH_LONG).show()
                     }
-                    adapter.notifyDataSetChanged()
-                    formulario.visibility = View.GONE
-                    fabAgregar.visibility = View.VISIBLE
-                    indexEnEdicion = -1
+                    finalizarFormulario()
                 }
             }
         } else {
@@ -185,19 +165,10 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(this, "Error: $mensaje", Toast.LENGTH_LONG).show()
                     }
-                    adapter.notifyDataSetChanged()
-                    formulario.visibility = View.GONE
-                    fabAgregar.visibility = View.VISIBLE
+                    finalizarFormulario()
                 }
             }
         }
-    }
-
-    private fun mostrarFormularioParaNuevo() {
-        formulario.visibility = View.VISIBLE
-        fabAgregar.visibility = View.GONE
-        limpiarCampos()
-        indexEnEdicion = -1
     }
 
     private fun cargarFormularioDesdeEstudiante(estudiante: Estudiante) {
@@ -205,6 +176,15 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         edtApellido.setText(estudiante.apellido)
         edtCodigo.setText(estudiante.codigo)
         edtCui.setText(estudiante.cui)
+        edtCui.isEnabled = false //  Desactivar el campo CUI al editar
+    }
+
+    private fun mostrarFormularioParaNuevo() {
+        formulario.visibility = View.VISIBLE
+        fabAgregar.visibility = View.GONE
+        limpiarCampos()
+        edtCui.isEnabled = true //  Habilitar CUI solo al crear nuevo
+        indexEnEdicion = -1
     }
 
     private fun limpiarCampos() {
@@ -212,6 +192,13 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         edtCodigo.text.clear()
         edtNombre.text.clear()
         edtApellido.text.clear()
+    }
+
+    private fun finalizarFormulario() {
+        adapter.notifyDataSetChanged()
+        formulario.visibility = View.GONE
+        fabAgregar.visibility = View.VISIBLE
+        indexEnEdicion = -1
     }
 
     private fun cargarEstudiantes(docenteId: Int) {

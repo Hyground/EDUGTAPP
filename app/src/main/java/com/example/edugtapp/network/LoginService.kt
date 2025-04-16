@@ -7,7 +7,6 @@ import org.json.JSONObject
 import java.io.IOException
 
 class LoginService {
-
     private val client = OkHttpClient()
     private val apiUrl = "https://eduapi-production.up.railway.app/api/docentes/login"
 
@@ -23,7 +22,7 @@ class LoginService {
         }
 
         val requestBody = json.toString()
-            .toRequestBody("application/json; charset=utf-8".toMediaType())
+            .toRequestBody("application/json".toMediaType())
 
         val request = Request.Builder()
             .url(apiUrl)
@@ -32,17 +31,11 @@ class LoginService {
             .build()
 
         client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                onError("Error de conexión: ${e.message}")
-            }
-
+            override fun onFailure(call: Call, e: IOException) = onError("Error de red: ${e.message}")
             override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                if (response.isSuccessful) {
-                    onSuccess(body ?: "Respuesta vacía")
-                } else {
-                    onError("Código: ${response.code}\nError: $body")
-                }
+                val body = response.body?.string() ?: ""
+                if (response.isSuccessful) onSuccess(body)
+                else onError("Código: ${response.code}, $body")
             }
         })
     }
