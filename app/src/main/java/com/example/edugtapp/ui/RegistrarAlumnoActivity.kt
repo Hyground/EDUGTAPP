@@ -31,6 +31,9 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
     private var itemExpandido = -1
     private var indexEnEdicion = -1
 
+    private var gradoId: Int = 0
+    private var seccionId: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_alumno)
@@ -38,6 +41,8 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         val grado = intent.getStringExtra("GRADO_DOCENTE") ?: "-"
         val seccion = intent.getStringExtra("SECCION_DOCENTE") ?: "-"
         val docenteId = intent.getIntExtra("DOCENTE_ID", -1)
+        gradoId = intent.getIntExtra("GRADO_ID", 0)
+        seccionId = intent.getIntExtra("SECCION_ID", 0)
 
         tvGrado = findViewById(R.id.tvGrado)
         tvSeccion = findViewById(R.id.tvSeccion)
@@ -55,6 +60,28 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         tvGrado.text = "Grado: $grado"
         tvSeccion.text = "Sección: $seccion"
 
+        inicializarAdapter()
+        listaEstudiantes.adapter = adapter
+
+        fabAgregar.setOnClickListener { mostrarFormularioParaNuevo() }
+
+        btnGuardar.setOnClickListener { guardarOActualizarEstudiante() }
+
+        btnCancelar.setOnClickListener {
+            limpiarCampos()
+            formulario.visibility = View.GONE
+            fabAgregar.visibility = View.VISIBLE
+            indexEnEdicion = -1
+        }
+
+        if (docenteId != -1) {
+            cargarEstudiantes(docenteId)
+        } else {
+            Toast.makeText(this, "ID de docente inválido", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun inicializarAdapter() {
         adapter = object : BaseAdapter() {
             override fun getCount(): Int = estudiantes.size
             override fun getItem(position: Int): Any = estudiantes[position]
@@ -102,52 +129,67 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                 }
 
                 btnEliminar.setOnClickListener {
-                    estudiantes.removeAt(position)
-                    itemExpandido = -1
-                    formulario.visibility = View.GONE
-                    fabAgregar.visibility = View.VISIBLE
-                    notifyDataSetChanged()
+                    EstudianteService.desactivarEstudiante(estudiante.cui) { exito, mensaje ->
+                        runOnUiThread {
+                            if (exito) {
+                                estudiantes.removeAt(position)
+                                Toast.makeText(this@RegistrarAlumnoActivity, "Estudiante desactivado", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(this@RegistrarAlumnoActivity, "Error: $mensaje", Toast.LENGTH_LONG).show()
+                            }
+                            itemExpandido = -1
+                            formulario.visibility = View.GONE
+                            fabAgregar.visibility = View.VISIBLE
+                            notifyDataSetChanged()
+                        }
+                    }
                 }
 
                 return view
             }
         }
+    }
 
-        listaEstudiantes.adapter = adapter
+    private fun guardarOActualizarEstudiante() {
+        val estudiante = Estudiante(
+            nombre = edtNombre.text.toString(),
+            apellido = edtApellido.text.toString(),
+            codigo = edtCodigo.text.toString(),
+            cui = edtCui.text.toString(),
+            gradoId = gradoId,
+            seccionId = seccionId,
+            activo = true
+        )
 
-        fabAgregar.setOnClickListener {
-            mostrarFormularioParaNuevo()
-        }
-
-        btnGuardar.setOnClickListener {
-            val nuevoEstudiante = Estudiante(
-                nombre = edtNombre.text.toString(),
-                apellido = edtApellido.text.toString(),
-                codigo = edtCodigo.text.toString(),
-                cui = edtCui.text.toString()
-            )
-            if (indexEnEdicion != -1) {
-                estudiantes[indexEnEdicion] = nuevoEstudiante
-            } else {
-                estudiantes.add(nuevoEstudiante)
+        if (indexEnEdicion != -1) {
+            EstudianteService.actualizarEstudiante(estudiante) { exito, mensaje ->
+                runOnUiThread {
+                    if (exito) {
+                        estudiantes[indexEnEdicion] = estudiante
+                        Toast.makeText(this, "Actualizado correctamente", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Error: $mensaje", Toast.LENGTH_LONG).show()
+                    }
+                    adapter.notifyDataSetChanged()
+                    formulario.visibility = View.GONE
+                    fabAgregar.visibility = View.VISIBLE
+                    indexEnEdicion = -1
+                }
             }
-            adapter.notifyDataSetChanged()
-            formulario.visibility = View.GONE
-            fabAgregar.visibility = View.VISIBLE
-            indexEnEdicion = -1
-        }
-
-        btnCancelar.setOnClickListener {
-            limpiarCampos()
-            formulario.visibility = View.GONE
-            fabAgregar.visibility = View.VISIBLE
-            indexEnEdicion = -1
-        }
-
-        if (docenteId != -1) {
-            cargarEstudiantes(docenteId)
         } else {
-            Toast.makeText(this, "ID de docente inválido", Toast.LENGTH_LONG).show()
+            EstudianteService.crearEstudiante(estudiante) { exito, mensaje ->
+                runOnUiThread {
+                    if (exito) {
+                        estudiantes.add(estudiante)
+                        Toast.makeText(this, "Estudiante registrado", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Error: $mensaje", Toast.LENGTH_LONG).show()
+                    }
+                    adapter.notifyDataSetChanged()
+                    formulario.visibility = View.GONE
+                    fabAgregar.visibility = View.VISIBLE
+                }
+            }
         }
     }
 

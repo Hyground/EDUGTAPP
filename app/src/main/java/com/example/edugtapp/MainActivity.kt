@@ -73,12 +73,15 @@ class MainActivity : AppCompatActivity() {
             val json = JSONObject(respuesta)
 
             val nombreCompleto = json.optString("nombreCompleto", null)
-            val usuarioID = json.optInt("usuarioID", -1) // <- ¡Este es el DocenteId correcto!
+            val usuarioID = json.optInt("usuarioID", -1)
             val nombreGrado = json.optJSONObject("grado")?.optString("nombre") ?: ""
             val nombreSeccion = json.optJSONObject("seccion")?.optString("nombre") ?: ""
 
+            val gradoId = json.optJSONObject("grado")?.optInt("id") ?: 0
+            val seccionId = json.optJSONObject("seccion")?.optInt("id") ?: 0
+
             if (nombreCompleto != null && usuarioID != -1) {
-                irAMenu(nombreCompleto, nombreGrado, nombreSeccion, usuarioID)
+                irAMenu(nombreCompleto, nombreGrado, nombreSeccion, usuarioID, gradoId, seccionId)
             } else {
                 mostrarMensaje("Respuesta inesperada del servidor")
             }
@@ -87,18 +90,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun irAMenu(nombre: String, grado: String, seccion: String, usuarioID: Int) {
+    private fun irAMenu(nombre: String, grado: String, seccion: String, usuarioID: Int, gradoId: Int, seccionId: Int) {
         startActivity(Intent(this, MenuActivity::class.java).apply {
             putExtra("NOMBRE_DOCENTE", nombre)
             putExtra("GRADO_DOCENTE", grado)
             putExtra("SECCION_DOCENTE", seccion)
-            putExtra("DOCENTE_ID", usuarioID) // <- Correcto
+            putExtra("DOCENTE_ID", usuarioID)
+            putExtra("GRADO_ID", gradoId)
+            putExtra("SECCION_ID", seccionId)
         })
         finish()
     }
-
-
-
 
     private fun mostrarMensaje(mensaje: String) {
         tvResultado.text = mensaje
@@ -108,5 +110,4 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = if (cargando) View.VISIBLE else View.GONE
         btnLogin.isEnabled = !cargando
     }
-
 }
