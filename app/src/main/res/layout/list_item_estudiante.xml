@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="@drawable/bg_estudiante_card"
+    android:layout_marginBottom="8dp"
+    android:elevation="2dp">
+
+    <!-- Línea 1: Nombre completo -->
+    <TextView
+        android:id="@+id/tvLinea1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre Apellido"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#212121" />
+
+    <!-- Línea 2: Código personal -->
+    <TextView
+        android:id="@+id/tvLinea2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Código: ABC123"
+        android:textSize="14sp"
+        android:textColor="#455A64" />
+
+    <!-- Línea 3: CUI -->
+    <TextView
+        android:id="@+id/tvLinea3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CUI No.: 1234567890101"
+        android:textSize="14sp"
+        android:textColor="#455A64" />
+
+    <!-- Botones que se expanden al presionar -->
+    <LinearLayout
+        android:id="@+id/opcionesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <!-- Botón: Actualizar -->
+        <Button
+            android:id="@+id/btnActualizar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Actualizar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#1E88E5" />
+
+        <!-- Botón: Retirar -->
+        <Button
+            android:id="@+id/btnEliminar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Retirar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#D32F2F" />
+    </LinearLayout>
+</LinearLayout>
