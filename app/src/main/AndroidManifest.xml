@@ -25,11 +25,14 @@
             </intent-filter>
         </activity>
 
-        <!-- Menú después del login -->
-        <activity
-            android:name=".ui.MenuActivity"
-            android:exported="false" />
+        <!-- Menú principal -->
+        <activity android:name=".ui.MenuActivity" android:exported="false" />
+
+        <!-- Registrar alumno -->
         <activity android:name=".ui.RegistrarAlumnoActivity" />
+
+        <!--  Nueva pantalla: Registrar actividad -->
+        <activity android:name=".ui.RegistrarActividadActivity" />
 
     </application>
 

@@ -32,6 +32,7 @@ class MenuActivity : AppCompatActivity() {
         tvNombreDocente.text = "Docente: $nombreDocente"
         tvGradoSeccion.text = "Grado: $gradoDocente   Sección: $seccionDocente"
 
+        // Contar estudiantes según docente
         EstudianteService.obtenerEstudiantesPorDocente(docenteId) { lista ->
             runOnUiThread {
                 val cantidad = lista.size
@@ -55,7 +56,14 @@ class MenuActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnCrearActividades).setOnClickListener {
-            // TODO: Implementar creación de actividades
+            startActivity(Intent(this, RegistrarActividadActivity::class.java).apply {
+                putExtra("NOMBRE_DOCENTE", nombreDocente)
+                putExtra("GRADO_DOCENTE", gradoDocente)
+                putExtra("SECCION_DOCENTE", seccionDocente)
+                putExtra("DOCENTE_ID", docenteId)
+                putExtra("GRADO_ID", gradoId)
+                putExtra("SECCION_ID", seccionId)
+            })
         }
 
         findViewById<Button>(R.id.btnRegistrarNotas).setOnClickListener {

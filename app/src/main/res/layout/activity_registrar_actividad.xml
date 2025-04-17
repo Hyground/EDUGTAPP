@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registrar Actividad"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:id="@+id/tvGradoSeccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grado: - / Sección: -" />
+
+        <!-- Bimestre -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar bimestre"
+            android:layout_marginTop="12dp" />
+        <Spinner
+            android:id="@+id/spinnerBimestre"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Curso -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar curso" />
+        <Spinner
+            android:id="@+id/spinnerCurso"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnCargarActividades"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Ver actividades"
+            android:layout_marginTop="4dp" />
+
+        <!-- Lista de actividades -->
+        <ListView
+            android:id="@+id/listActividades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
+
+        <!-- Título -->
+        <TextView
+            android:text="Registrar nueva actividad"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Nombre -->
+        <EditText
+            android:id="@+id/edtNombre"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Nombre de la actividad"
+            android:layout_marginTop="8dp"
+            android:inputType="textCapSentences" />
+
+        <!-- Ponderación -->
+        <EditText
+            android:id="@+id/edtPonderacion"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Ponderación (%)"
+            android:inputType="numberDecimal"
+            android:layout_marginTop="8dp" />
+
+        <!-- Tipo -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo de evaluación"
+            android:layout_marginTop="8dp" />
+        <Spinner
+            android:id="@+id/spinnerTipo"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Guardar -->
+        <Button
+            android:id="@+id/btnGuardarActividad"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Guardar"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+</ScrollView>
