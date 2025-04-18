@@ -6,14 +6,28 @@
     android:background="@android:color/white"
     android:padding="16dp">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#FFC107"
-        android:title="Actividades"
-        android:titleTextColor="@android:color/white" />
+        app:contentInsetStartWithNavigation="0dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <!-- Título personalizado centrado vertical -->
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="Registrar Actividades"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+    </androidx.appcompat.widget.Toolbar>
+
 
     <!-- Filtros -->
     <LinearLayout
@@ -64,7 +78,7 @@
             <Spinner
                 android:id="@+id/spinnerBimestre"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:layout_height="48dp" />
 
             <Space
@@ -74,7 +88,7 @@
             <Spinner
                 android:id="@+id/spinnerCurso"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.7"
                 android:layout_height="48dp" />
         </LinearLayout>
     </LinearLayout>

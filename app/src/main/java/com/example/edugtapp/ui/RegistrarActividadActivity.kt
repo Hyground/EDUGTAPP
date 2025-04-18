@@ -46,7 +46,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
 
         // Inicializar UI
         inicializarVista()
-        tvGradoSeccion.text = "Grado: $gradoTexto / Sección: $seccionTexto"
+        tvGradoSeccion.text = "Grado: $gradoTexto                     Sección: $seccionTexto"
 
         spinnerBimestre.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Seleccionar") + bimestres.map { it.second })
         cargarCursos()
@@ -74,6 +74,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     private fun cargarCursos() {
