@@ -46,8 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Actividad"
-            android:backgroundTint="#7E57C2"
-            android:buttonTint="#7E57C2"
+            android:backgroundTint="#6F2CE0"
+            android:buttonTint="#2D0F5C"
             android:textColor="#000000" />
 
         <RadioButton
