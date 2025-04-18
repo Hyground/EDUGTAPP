@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/formularioInterno"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#F9F9F9"
+    android:elevation="6dp"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/edtCui"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:paddingVertical="8dp"
+        android:hint="CUI"
+        android:inputType="number"
+        android:backgroundTint="#1565C0" />
+
+    <EditText
+        android:id="@+id/edtCodigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:paddingVertical="8dp"
+        android:hint="Código Personal"
+        android:inputType="text"
+        android:backgroundTint="#1565C0" />
+
+    <EditText
+        android:id="@+id/edtNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:paddingVertical="8dp"
+        android:hint="Nombre"
+        android:inputType="textPersonName"
+        android:backgroundTint="#1565C0" />
+
+    <EditText
+        android:id="@+id/edtApellido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:paddingVertical="8dp"
+        android:hint="Apellido"
+        android:inputType="textPersonName"
+        android:backgroundTint="#1565C0" />
+
+    <!-- Botones -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"
+            android:text="Guardar"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:backgroundTint="#43A047" />
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:minHeight="48dp"
+            android:text="Cancelar"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:backgroundTint="#E53935" />
+    </LinearLayout>
+</LinearLayout>
