@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_estudiante_card">
+
+    <!-- Nombre de la actividad (más grande y fuerte) -->
+    <TextView
+        android:id="@+id/tvNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre Actividad"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#000000" />
+
+    <!-- Tipo -->
+    <TextView
+        android:id="@+id/tvTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo: Evaluación"
+        android:layout_marginTop="6dp"
+        android:textSize="14sp"
+        android:textColor="#444444" />
+
+    <!-- Ponderación -->
+    <TextView
+        android:id="@+id/tvPonderacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ponderación: 10"
+        android:textSize="14sp"
+        android:textColor="#444444" />
+</LinearLayout>

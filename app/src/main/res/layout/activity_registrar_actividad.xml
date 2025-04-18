@@ -1,110 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:fitsSystemWindows="true">
 
+    <!-- Encabezado -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFC107"
+        android:title="Actividades"
+        android:titleTextColor="@android:color/white"
+        android:elevation="4dp" />
+
+    <!-- Contenedor de filtros -->
     <LinearLayout
+        android:id="@+id/filterContainer"
+        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="@android:color/white"
+        android:elevation="2dp">
 
-        <TextView
-            android:id="@+id/tvHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registrar Actividad"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingBottom="12dp" />
-
+        <!-- Grado / Sección -->
         <TextView
             android:id="@+id/tvGradoSeccion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Grado: - / Sección: -" />
-
-        <!-- Bimestre -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Seleccionar bimestre"
-            android:layout_marginTop="12dp" />
-        <Spinner
-            android:id="@+id/spinnerBimestre"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Curso -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Seleccionar curso" />
-        <Spinner
-            android:id="@+id/spinnerCurso"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnCargarActividades"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Ver actividades"
-            android:layout_marginTop="4dp" />
-
-        <!-- Lista de actividades -->
-        <ListView
-            android:id="@+id/listActividades"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
-
-        <!-- Título -->
-        <TextView
-            android:text="Registrar nueva actividad"
+            android:text="Grado: - / Sección: -"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textColor="#000000"
+            android:paddingBottom="6dp" />
 
-        <!-- Nombre -->
-        <EditText
-            android:id="@+id/edtNombre"
+        <!-- Etiquetas Bimestre / Curso -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="Nombre de la actividad"
-            android:layout_marginTop="8dp"
-            android:inputType="textCapSentences" />
-
-        <!-- Ponderación -->
-        <EditText
-            android:id="@+id/edtPonderacion"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="Ponderación (%)"
-            android:inputType="numberDecimal"
-            android:layout_marginTop="8dp" />
-
-        <!-- Tipo -->
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tipo de evaluación"
-            android:layout_marginTop="8dp" />
-        <Spinner
-            android:id="@+id/spinnerTipo"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp" />
+            android:orientation="horizontal"
+            android:paddingBottom="2dp">
 
-        <!-- Guardar -->
-        <Button
-            android:id="@+id/btnGuardarActividad"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content"
+                android:text="Bimestre"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1.4"
+                android:layout_height="wrap_content"
+                android:text="Curso"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Spinners -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Guardar"
-            android:layout_marginTop="12dp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Spinner Bimestre -->
+            <Spinner
+                android:id="@+id/spinnerBimestre"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content" />
+
+            <!-- Spinner Curso -->
+            <Spinner
+                android:id="@+id/spinnerCurso"
+                android:layout_width="0dp"
+                android:layout_weight="1.4"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </LinearLayout>
-</ScrollView>
+
+    <!-- Lista -->
+    <ListView
+        android:id="@+id/listActividades"
+        android:layout_below="@id/filterContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="12dp"
+        android:padding="12dp"
+        android:clipToPadding="false" />
+
+
+    <!-- Botón flotante -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20dp"
+        android:contentDescription="Agregar"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@android:color/white"
+        app:backgroundTint="@android:color/holo_red_dark" />
+</RelativeLayout>
