@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Actividad"
-            android:backgroundTint="#6F2CE0"
+            android:backgroundTint="#620EED"
             android:buttonTint="#2D0F5C"
             android:textColor="#000000" />
 
@@ -76,7 +76,7 @@
             android:layout_weight="1"
             android:text="Guardar"
             android:textColor="@android:color/white"
-            android:backgroundTint="#7E57C2" />
+            android:backgroundTint="#4CAF50" />
 
         <Button
             android:id="@+id/btnCancelarActividad"

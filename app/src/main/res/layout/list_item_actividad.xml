@@ -34,5 +34,5 @@
         android:layout_height="wrap_content"
         android:text="Ponderación: 10"
         android:textSize="14sp"
-        android:textColor="#444444" />
+        android:textColor="#171616" />
 </LinearLayout>

@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:paddingVertical="8dp"
-        android:hint="CUI"
+        android:hint="CUI del estudiante"
+        android:textColor="#000000"
+        android:textColorHint="#888888"
         android:inputType="number"
         android:backgroundTint="#1565C0" />
 
@@ -24,7 +26,9 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:paddingVertical="8dp"
-        android:hint="Código Personal"
+        android:hint="Código personal"
+        android:textColor="#000000"
+        android:textColorHint="#888888"
         android:inputType="text"
         android:backgroundTint="#1565C0" />
 
@@ -34,7 +38,9 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:paddingVertical="8dp"
-        android:hint="Nombre"
+        android:hint="Nombre del estudiante"
+        android:textColor="#000000"
+        android:textColorHint="#888888"
         android:inputType="textPersonName"
         android:backgroundTint="#1565C0" />
 
@@ -44,7 +50,9 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:paddingVertical="8dp"
-        android:hint="Apellido"
+        android:hint="Apellido del estudiante"
+        android:textColor="#000000"
+        android:textColorHint="#888888"
         android:inputType="textPersonName"
         android:backgroundTint="#1565C0" />
 
