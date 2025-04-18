@@ -1,13 +1,13 @@
 package com.example.edugtapp.ui
 
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.edugtapp.R
 import com.example.edugtapp.network.ActividadService
 import com.example.edugtapp.network.CursoService
-import org.json.JSONArray
 
 class RegistrarActividadActivity : AppCompatActivity() {
 
@@ -17,13 +17,17 @@ class RegistrarActividadActivity : AppCompatActivity() {
     private lateinit var btnAdd: com.google.android.material.floatingactionbutton.FloatingActionButton
     private lateinit var tvGradoSeccion: TextView
 
-    private val bimestres = listOf(
-        Pair(1, "I"),
-        Pair(2, "II"),
-        Pair(3, "III"),
-        Pair(4, "IV")
-    )
+    // Formulario
+    private lateinit var formulario: LinearLayout
+    private lateinit var edtNombre: EditText
+    private lateinit var edtPonderacion: EditText
+    private lateinit var rgTipo: RadioGroup
+    private lateinit var rbActividad: RadioButton
+    private lateinit var rbEvaluacion: RadioButton
+    private lateinit var btnGuardar: Button
+    private lateinit var btnCancelar: Button
 
+    private val bimestres = listOf(Pair(1, "I"), Pair(2, "II"), Pair(3, "III"), Pair(4, "IV"))
     private var gradoId = 0
     private var seccionId = 0
     private var cursoIds = listOf<Int>()
@@ -32,34 +36,67 @@ class RegistrarActividadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_actividad)
 
-        // Toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Recuperar datos del intent
         gradoId = intent.getIntExtra("GRADO_ID", 0)
         seccionId = intent.getIntExtra("SECCION_ID", 0)
         val gradoTexto = intent.getStringExtra("GRADO_DOCENTE") ?: "-"
         val seccionTexto = intent.getStringExtra("SECCION_DOCENTE") ?: "-"
 
-        // Referencias
         spinnerBimestre = findViewById(R.id.spinnerBimestre)
         spinnerCurso = findViewById(R.id.spinnerCurso)
         listActividades = findViewById(R.id.listActividades)
         btnAdd = findViewById(R.id.btnAdd)
         tvGradoSeccion = findViewById(R.id.tvGradoSeccion)
 
+        // Formulario
+        formulario = findViewById(R.id.formularioActividad)
+        edtNombre = findViewById(R.id.edtNombre)
+        edtPonderacion = findViewById(R.id.edtPonderacion)
+        rgTipo = findViewById(R.id.rgTipo)
+        rbActividad = findViewById(R.id.rbActividad)
+        rbEvaluacion = findViewById(R.id.rbEvaluacion)
+        btnGuardar = findViewById(R.id.btnGuardarActividad)
+        btnCancelar = findViewById(R.id.btnCancelarActividad)
+
         tvGradoSeccion.text = "Grado: $gradoTexto / Sección: $seccionTexto"
+        spinnerBimestre.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Selecionar") + bimestres.map { it.second })
 
-        // Spinner Bimestre con opción por defecto
-        val bimestreOpciones = listOf("Selecionar") + bimestres.map { it.second }
-        spinnerBimestre.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, bimestreOpciones)
-
-        // Cargar cursos dinámicamente
         cargarCursos()
 
         btnAdd.setOnClickListener {
-            mostrarFormularioRegistro()
+            mostrarFormulario()
+        }
+
+        btnCancelar.setOnClickListener {
+            limpiarFormulario()
+        }
+
+        btnGuardar.setOnClickListener {
+            val nombre = edtNombre.text.toString().trim()
+            val ponderacion = edtPonderacion.text.toString().toDoubleOrNull() ?: 0.0
+            val tipo = when {
+                rbActividad.isChecked -> "Actividad"
+                rbEvaluacion.isChecked -> "Evaluacion"
+                else -> ""
+            }
+
+            val bimestreId = bimestres.getOrNull(spinnerBimestre.selectedItemPosition - 1)?.first ?: return@setOnClickListener
+            val cursoId = cursoIds.getOrNull(spinnerCurso.selectedItemPosition - 1) ?: return@setOnClickListener
+
+            if (nombre.isEmpty() || tipo.isEmpty() || ponderacion <= 0.0) {
+                Toast.makeText(this, "Complete todos los campos correctamente", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            ActividadService.crearActividad(gradoId, seccionId, cursoId, bimestreId, nombre, tipo, ponderacion) {
+                runOnUiThread {
+                    Toast.makeText(this, "Actividad registrada", Toast.LENGTH_SHORT).show()
+                    limpiarFormulario()
+                    cargarActividades(gradoId, seccionId, cursoId, bimestreId)
+                }
+            }
         }
     }
 
@@ -76,9 +113,8 @@ class RegistrarActividadActivity : AppCompatActivity() {
                 cursoIds = ids
                 spinnerCurso.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, nombres)
 
-                // Listeners
                 spinnerCurso.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         if (position == 0 || spinnerBimestre.selectedItemPosition == 0) return
                         val cursoId = cursoIds.getOrNull(position - 1) ?: return
                         val bimestreId = bimestres.getOrNull(spinnerBimestre.selectedItemPosition - 1)?.first ?: return
@@ -89,7 +125,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
                 }
 
                 spinnerBimestre.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         if (position == 0 || spinnerCurso.selectedItemPosition == 0) return
                         val bimestreId = bimestres.getOrNull(position - 1)?.first ?: return
                         val cursoId = cursoIds.getOrNull(spinnerCurso.selectedItemPosition - 1) ?: return
@@ -138,38 +174,16 @@ class RegistrarActividadActivity : AppCompatActivity() {
         }
     }
 
-    private fun mostrarFormularioRegistro() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_nueva_actividad, null)
-        val dialog = android.app.AlertDialog.Builder(this).setView(dialogView).create()
+    private fun mostrarFormulario() {
+        formulario.visibility = View.VISIBLE
+        btnAdd.hide()
+    }
 
-        val edtNombre = dialogView.findViewById<EditText>(R.id.edtNombre)
-        val edtPonderacion = dialogView.findViewById<EditText>(R.id.edtPonderacion)
-        val spinnerTipo = dialogView.findViewById<Spinner>(R.id.spinnerTipo)
-        val btnGuardar = dialogView.findViewById<Button>(R.id.btnGuardarActividad)
-
-        spinnerTipo.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Actividad", "Evaluacion"))
-
-        btnGuardar.setOnClickListener {
-            val nombre = edtNombre.text.toString().trim()
-            val ponderacion = edtPonderacion.text.toString().toDoubleOrNull() ?: 0.0
-            val tipo = spinnerTipo.selectedItem.toString()
-            val bimestreId = bimestres.getOrNull(spinnerBimestre.selectedItemPosition - 1)?.first ?: return@setOnClickListener
-            val cursoId = cursoIds.getOrNull(spinnerCurso.selectedItemPosition - 1) ?: return@setOnClickListener
-
-            if (nombre.isEmpty() || ponderacion <= 0.0) {
-                Toast.makeText(this, "Complete los campos correctamente", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            ActividadService.crearActividad(gradoId, seccionId, cursoId, bimestreId, nombre, tipo, ponderacion) {
-                runOnUiThread {
-                    Toast.makeText(this, "Actividad registrada", Toast.LENGTH_SHORT).show()
-                    cargarActividades(gradoId, seccionId, cursoId, bimestreId)
-                    dialog.dismiss()
-                }
-            }
-        }
-
-        dialog.show()
+    private fun limpiarFormulario() {
+        formulario.visibility = View.GONE
+        btnAdd.show()
+        edtNombre.text.clear()
+        edtPonderacion.text.clear()
+        rgTipo.clearCheck()
     }
 }

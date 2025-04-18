@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/formularioInterno"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#F9F9F9"
+    android:elevation="6dp"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/edtNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:hint="Nombre de la actividad"
+        android:textColor="#000000"
+        android:textColorHint="#666666"
+        android:inputType="textCapSentences"
+        android:backgroundTint="#512DA8" />
+
+    <EditText
+        android:id="@+id/edtPonderacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:layout_marginTop="8dp"
+        android:hint="Ponderación"
+        android:textColor="#000000"
+        android:textColorHint="#666666"
+        android:inputType="numberDecimal"
+        android:backgroundTint="#512DA8" />
+
+    <!-- Toggle tipo actividad -->
+    <RadioGroup
+        android:id="@+id/rgTipo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <RadioButton
+            android:id="@+id/rbActividad"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Actividad"
+            android:backgroundTint="#7E57C2"
+            android:buttonTint="#7E57C2"
+            android:textColor="#000000" />
+
+        <RadioButton
+            android:id="@+id/rbEvaluacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Evaluación"
+            android:backgroundTint="#7E57C2"
+            android:buttonTint="#7E57C2"
+            android:textColor="#000000" />
+    </RadioGroup>
+
+    <!-- Botones -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btnGuardarActividad"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Guardar"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#7E57C2" />
+
+        <Button
+            android:id="@+id/btnCancelarActividad"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Cancelar"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#D32F2F" />
+    </LinearLayout>
+</LinearLayout>

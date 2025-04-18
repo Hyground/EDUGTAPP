@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:background="@android:color/white"
+    android:padding="16dp">
 
-    <!-- Encabezado -->
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#FFC107"
         android:title="Actividades"
-        android:titleTextColor="@android:color/white"
-        android:elevation="4dp" />
+        android:titleTextColor="@android:color/white" />
 
-    <!-- Contenedor de filtros -->
+    <!-- Filtros -->
     <LinearLayout
         android:id="@+id/filterContainer"
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp"
-        android:background="@android:color/white"
-        android:elevation="2dp">
+        android:padding="12dp">
 
-        <!-- Grado / Sección -->
         <TextView
             android:id="@+id/tvGradoSeccion"
             android:layout_width="wrap_content"
@@ -37,16 +33,15 @@
             android:textColor="#000000"
             android:paddingBottom="6dp" />
 
-        <!-- Etiquetas Bimestre / Curso -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="2dp">
+            android:paddingBottom="4dp">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.6"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Bimestre"
                 android:textColor="#666666"
@@ -54,36 +49,33 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1.4"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Curso"
                 android:textColor="#666666"
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Spinners -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- Spinner Bimestre -->
             <Spinner
                 android:id="@+id/spinnerBimestre"
                 android:layout_width="0dp"
-                android:layout_weight="0.6"
-                android:layout_height="wrap_content" />
+                android:layout_weight="1"
+                android:layout_height="48dp" />
 
             <Space
                 android:layout_width="16dp"
                 android:layout_height="wrap_content" />
 
-            <!-- Spinner Curso -->
             <Spinner
                 android:id="@+id/spinnerCurso"
                 android:layout_width="0dp"
-                android:layout_weight="1.4"
-                android:layout_height="wrap_content" />
+                android:layout_weight="1"
+                android:layout_height="48dp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -91,15 +83,26 @@
     <ListView
         android:id="@+id/listActividades"
         android:layout_below="@id/filterContainer"
+        android:layout_above="@id/formularioActividad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"
         android:dividerHeight="12dp"
-        android:padding="12dp"
-        android:clipToPadding="false" />
+        android:padding="12dp" />
 
+    <!-- Formulario -->
+    <LinearLayout
+        android:id="@+id/formularioActividad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <!-- Botón flotante -->
+        <include layout="@layout/formulario_actividad" />
+    </LinearLayout>
+
+    <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
