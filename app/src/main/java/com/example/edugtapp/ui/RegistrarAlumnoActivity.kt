@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.R
+import com.example.edugtapp.model.DocenteInfo
 import com.example.edugtapp.network.Estudiante
 import com.example.edugtapp.network.EstudianteService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -27,19 +28,13 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
     private lateinit var adapter: BaseAdapter
     private var itemExpandido = -1
     private var indexEnEdicion = -1
-    private var gradoId: Int = 0
-    private var seccionId: Int = 0
+    private lateinit var docenteInfo: DocenteInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_alumno)
 
-        gradoId = intent.getIntExtra("GRADO_ID", 0)
-        seccionId = intent.getIntExtra("SECCION_ID", 0)
-
-        val grado = intent.getStringExtra("GRADO_DOCENTE") ?: "-"
-        val seccion = intent.getStringExtra("SECCION_DOCENTE") ?: "-"
-        val docenteId = intent.getIntExtra("DOCENTE_ID", -1)
+        docenteInfo = DocenteInfo.fromIntent(intent)
 
         tvGrado = findViewById(R.id.tvGrado)
         tvSeccion = findViewById(R.id.tvSeccion)
@@ -54,8 +49,8 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         btnGuardar = findViewById(R.id.btnGuardar)
         btnCancelar = findViewById(R.id.btnCancelar)
 
-        tvGrado.text = "Grado: $grado"
-        tvSeccion.text = "Sección: $seccion"
+        tvGrado.text = "Grado: ${docenteInfo.grado}"
+        tvSeccion.text = "Sección: ${docenteInfo.seccion}"
 
         inicializarAdapter()
         listaEstudiantes.adapter = adapter
@@ -69,7 +64,7 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
             indexEnEdicion = -1
         }
 
-        if (docenteId != -1) cargarEstudiantes(docenteId)
+        cargarEstudiantes(docenteInfo.docenteId)
     }
 
     private fun inicializarAdapter() {
@@ -139,8 +134,8 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
             apellido = edtApellido.text.toString(),
             codigo = edtCodigo.text.toString(),
             cui = edtCui.text.toString(),
-            gradoId = gradoId,
-            seccionId = seccionId,
+            gradoId = docenteInfo.gradoId,
+            seccionId = docenteInfo.seccionId,
             activo = true
         )
 
@@ -176,14 +171,14 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
         edtApellido.setText(estudiante.apellido)
         edtCodigo.setText(estudiante.codigo)
         edtCui.setText(estudiante.cui)
-        edtCui.isEnabled = false //  Desactivar el campo CUI al editar
+        edtCui.isEnabled = false
     }
 
     private fun mostrarFormularioParaNuevo() {
         formulario.visibility = View.VISIBLE
         fabAgregar.visibility = View.GONE
         limpiarCampos()
-        edtCui.isEnabled = true //  Habilitar CUI solo al crear nuevo
+        edtCui.isEnabled = true
         indexEnEdicion = -1
     }
 

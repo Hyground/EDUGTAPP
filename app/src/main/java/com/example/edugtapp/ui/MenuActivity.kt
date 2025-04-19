@@ -9,34 +9,31 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.MainActivity
 import com.example.edugtapp.R
+import com.example.edugtapp.model.DocenteInfo
 import com.example.edugtapp.network.EstudianteService
 
 class MenuActivity : AppCompatActivity() {
+
+    private lateinit var docenteInfo: DocenteInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        val nombreDocente = intent.getStringExtra("NOMBRE_DOCENTE") ?: "-"
-        val gradoDocente = intent.getStringExtra("GRADO_DOCENTE") ?: "-"
-        val seccionDocente = intent.getStringExtra("SECCION_DOCENTE") ?: "-"
-        val docenteId = intent.getIntExtra("DOCENTE_ID", -1)
-        val gradoId = intent.getIntExtra("GRADO_ID", 0)
-        val seccionId = intent.getIntExtra("SECCION_ID", 0)
+        docenteInfo = DocenteInfo.fromIntent(intent)
 
         val tvNombreDocente = findViewById<TextView>(R.id.tvNombreDocente)
         val tvGradoSeccion = findViewById<TextView>(R.id.tvGradoSeccion)
         val tvCantidadEstudiantes = findViewById<TextView>(R.id.tvCantidadEstudiantes)
         val imgAvatar = findViewById<ImageView>(R.id.imgAvatarDocente)
 
-        tvNombreDocente.text = "Docente: $nombreDocente"
-        tvGradoSeccion.text = "Grado: $gradoDocente   Sección: $seccionDocente"
+        tvNombreDocente.text = "Docente: ${docenteInfo.nombre}"
+        tvGradoSeccion.text = "Grado: ${docenteInfo.grado}   Sección: ${docenteInfo.seccion}"
 
-        // Contar estudiantes según docente
-        EstudianteService.obtenerEstudiantesPorDocente(docenteId) { lista ->
+        // Obtener cantidad de estudiantes
+        EstudianteService.obtenerEstudiantesPorDocente(docenteInfo.docenteId) { lista ->
             runOnUiThread {
-                val cantidad = lista.size
-                tvCantidadEstudiantes.text = "Estudiantes: $cantidad"
+                tvCantidadEstudiantes.text = "Estudiantes: ${lista.size}"
             }
         }
 
@@ -45,37 +42,23 @@ class MenuActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnRegistrarAlumnos).setOnClickListener {
-            startActivity(Intent(this, RegistrarAlumnoActivity::class.java).apply {
-                putExtra("NOMBRE_DOCENTE", nombreDocente)
-                putExtra("GRADO_DOCENTE", gradoDocente)
-                putExtra("SECCION_DOCENTE", seccionDocente)
-                putExtra("DOCENTE_ID", docenteId)
-                putExtra("GRADO_ID", gradoId)
-                putExtra("SECCION_ID", seccionId)
-            })
+            startActivity(docenteInfo.applyTo(Intent(this, RegistrarAlumnoActivity::class.java)))
         }
 
         findViewById<Button>(R.id.btnCrearActividades).setOnClickListener {
-            startActivity(Intent(this, RegistrarActividadActivity::class.java).apply {
-                putExtra("NOMBRE_DOCENTE", nombreDocente)
-                putExtra("GRADO_DOCENTE", gradoDocente)
-                putExtra("SECCION_DOCENTE", seccionDocente)
-                putExtra("DOCENTE_ID", docenteId)
-                putExtra("GRADO_ID", gradoId)
-                putExtra("SECCION_ID", seccionId)
-            })
+            startActivity(docenteInfo.applyTo(Intent(this, RegistrarActividadActivity::class.java)))
         }
 
         findViewById<Button>(R.id.btnRegistrarNotas).setOnClickListener {
-            // TODO: Implementar registro de notas
+            // Aquí se puede reutilizar también
+            startActivity(docenteInfo.applyTo(Intent(this, RegistrarNotasActivity::class.java)))
         }
 
         findViewById<Button>(R.id.btnCerrarSesion).setOnClickListener {
-            val prefs = getSharedPreferences("eduPrefs", MODE_PRIVATE)
-            prefs.edit().clear().apply()
-
-            val intent = Intent(this@MenuActivity, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            getSharedPreferences("eduPrefs", MODE_PRIVATE).edit().clear().apply()
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            }
             startActivity(intent)
             finish()
         }
