@@ -15,6 +15,7 @@ import com.example.edugtapp.network.EstudianteService
 class MenuActivity : AppCompatActivity() {
 
     private lateinit var docenteInfo: DocenteInfo
+    private lateinit var tvCantidadEstudiantes: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,18 +25,11 @@ class MenuActivity : AppCompatActivity() {
 
         val tvNombreDocente = findViewById<TextView>(R.id.tvNombreDocente)
         val tvGradoSeccion = findViewById<TextView>(R.id.tvGradoSeccion)
-        val tvCantidadEstudiantes = findViewById<TextView>(R.id.tvCantidadEstudiantes)
+        tvCantidadEstudiantes = findViewById(R.id.tvCantidadEstudiantes)
         val imgAvatar = findViewById<ImageView>(R.id.imgAvatarDocente)
 
         tvNombreDocente.text = "Docente: ${docenteInfo.nombre}"
         tvGradoSeccion.text = "Grado: ${docenteInfo.grado}   Sección: ${docenteInfo.seccion}"
-
-        // Obtener cantidad de estudiantes
-        EstudianteService.obtenerEstudiantesPorDocente(docenteInfo.docenteId) { lista ->
-            runOnUiThread {
-                tvCantidadEstudiantes.text = "Estudiantes: ${lista.size}"
-            }
-        }
 
         imgAvatar.setOnClickListener {
             Toast.makeText(this, "Función para cambiar foto próximamente", Toast.LENGTH_SHORT).show()
@@ -50,7 +44,6 @@ class MenuActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnRegistrarNotas).setOnClickListener {
-            // Aquí se puede reutilizar también
             startActivity(docenteInfo.applyTo(Intent(this, RegistrarNotasActivity::class.java)))
         }
 
@@ -61,6 +54,15 @@ class MenuActivity : AppCompatActivity() {
             }
             startActivity(intent)
             finish()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EstudianteService.obtenerEstudiantesPorDocente(docenteInfo.docenteId) { lista ->
+            runOnUiThread {
+                tvCantidadEstudiantes.text = "Estudiantes: ${lista.size}"
+            }
         }
     }
 }
