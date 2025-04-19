@@ -95,7 +95,7 @@
         android:id="@+id/btnRegistrarNotas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Registrar Notas"
+        android:text="Calificar"
         android:backgroundTint="#673AB7"
         android:textColor="@android:color/white"
         android:layout_marginTop="12dp"
