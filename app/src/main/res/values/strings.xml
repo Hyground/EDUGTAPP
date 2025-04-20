@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">EDUGTAPP</string>
+    <string name="avatar_docente">Foto de perfil del docente</string>
+    <string name="editar_foto">Editar foto de perfil</string>
+
+    <string name="text_docente_con_nombre">Docente: %1$s</string>
+    <string name="text_grado_seccion">Grado: %1$s   Sección: %2$s</string>
+    <string name="text_estudiantes">Estudiantes: %1$d</string>
+
+    <string name="text_docente_placeholder">Docente</string>
+    <string name="text_grado_seccion_placeholder">Grado - Sección</string>
+    <string name="text_estudiantes_placeholder">Estudiantes: -</string>
 </resources>
