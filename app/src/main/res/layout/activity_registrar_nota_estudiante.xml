@@ -68,4 +68,15 @@
         android:paddingBottom="8dp"
         android:visibility="gone"
         android:clipToPadding="false" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvActividades"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        android:clipToPadding="false"
+        android:contentDescription="Listado de actividades para el curso y bimestre seleccionado" />
+
 </LinearLayout>

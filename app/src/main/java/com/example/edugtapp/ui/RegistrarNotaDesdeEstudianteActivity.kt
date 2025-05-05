@@ -11,6 +11,7 @@ import com.example.edugtapp.R
 import com.example.edugtapp.network.ActividadService
 import com.example.edugtapp.network.CursoService
 import com.example.edugtapp.network.EstudianteService
+import com.example.edugtapp.ui.adapter.ActividadAdapter
 import com.example.edugtapp.ui.adapter.BimestreAdapter
 import com.example.edugtapp.ui.adapter.CursoAdapter
 
@@ -21,6 +22,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
     private lateinit var tvBimestreSeleccionado: TextView
     private lateinit var rvCursos: RecyclerView
     private lateinit var rvBimestres: RecyclerView
+    private lateinit var rvActividades: RecyclerView
 
     private lateinit var estudianteCui: String
     private var gradoId: Int = -1
@@ -40,9 +42,11 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
         tvBimestreSeleccionado = findViewById(R.id.tvBimestreSeleccionado)
         rvCursos = findViewById(R.id.rvCursos)
         rvBimestres = findViewById(R.id.rvBimestres)
+        rvActividades = findViewById(R.id.rvActividades)
 
         rvCursos.layoutManager = GridLayoutManager(this, 2)
         rvBimestres.layoutManager = GridLayoutManager(this, 2)
+        rvActividades.layoutManager = GridLayoutManager(this, 1)
 
         cargarDatosEstudiante(estudianteCui)
     }
@@ -74,6 +78,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
 
                 rvCursos.visibility = View.VISIBLE
                 rvBimestres.visibility = View.GONE
+                rvActividades.visibility = View.GONE
 
                 rvCursos.adapter = CursoAdapter(listaCursos) { cursoId, nombreCurso ->
                     cursoSeleccionadoId = cursoId
@@ -95,6 +100,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
 
         rvCursos.visibility = View.GONE
         rvBimestres.visibility = View.VISIBLE
+        rvActividades.visibility = View.GONE
 
         rvBimestres.adapter = BimestreAdapter(listaBimestres) { bimestreId, nombreBimestre ->
             nombreBimestreSeleccionado = nombreBimestre
@@ -111,15 +117,17 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
             bimestreId
         ) { actividadesArray ->
             runOnUiThread {
+                rvBimestres.visibility = View.GONE
                 if (actividadesArray.length() == 0) {
                     Toast.makeText(this, "No hay actividades registradas", Toast.LENGTH_SHORT).show()
+                    rvActividades.visibility = View.GONE
                 } else {
-                    Toast.makeText(
-                        this,
-                        "${actividadesArray.length()} actividades encontradas",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    // Aquí podrías abrir otra pantalla con las actividades
+                    val listaActividades = (0 until actividadesArray.length()).map {
+                        actividadesArray.getJSONObject(it)
+                    }
+
+                    rvActividades.adapter = ActividadAdapter(listaActividades)
+                    rvActividades.visibility = View.VISIBLE
                 }
             }
         }
