@@ -28,7 +28,6 @@ object EstudianteService {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) = callback(emptyList())
-
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 if (!response.isSuccessful || body == null) return callback(emptyList())
@@ -55,6 +54,32 @@ object EstudianteService {
         })
     }
 
+    fun obtenerEstudiantePorCui(cui: String, callback: (Estudiante?) -> Unit) {
+        val request = Request.Builder().url("$BASE_URL/$cui").get().build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) = callback(null)
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (!response.isSuccessful || body == null) return callback(null)
+                try {
+                    val obj = JSONObject(body)
+                    val estudiante = Estudiante(
+                        nombre = obj.optString("nombre"),
+                        apellido = obj.optString("apellido"),
+                        codigo = obj.optString("codigoPersonal"),
+                        cui = obj.optString("cui"),
+                        gradoId = obj.optJSONObject("grado")?.optInt("id") ?: 0,
+                        seccionId = obj.optJSONObject("seccion")?.optInt("id") ?: 0,
+                        activo = obj.optBoolean("borradoLogico", true)
+                    )
+                    callback(estudiante)
+                } catch (_: Exception) {
+                    callback(null)
+                }
+            }
+        })
+    }
+
     fun actualizarEstudiante(estudiante: Estudiante, callback: (Boolean, String) -> Unit) {
         val url = "$BASE_URL/${estudiante.cui}"
         val json = crearJson(estudiante)
@@ -63,7 +88,6 @@ object EstudianteService {
             .put(json.toString().toRequestBody("application/json".toMediaType()))
             .addHeader("Content-Type", "application/json")
             .build()
-
         client.newCall(request).enqueue(crearCallback(callback))
     }
 
@@ -74,7 +98,6 @@ object EstudianteService {
             .post(json.toString().toRequestBody("application/json".toMediaType()))
             .addHeader("Content-Type", "application/json")
             .build()
-
         client.newCall(request).enqueue(crearCallback(callback))
     }
 
@@ -84,7 +107,6 @@ object EstudianteService {
             .patch("".toRequestBody())
             .addHeader("Content-Type", "application/json")
             .build()
-
         client.newCall(request).enqueue(crearCallback(callback))
     }
 

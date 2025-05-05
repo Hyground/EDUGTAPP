@@ -1,5 +1,6 @@
 package com.example.edugtapp.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -121,6 +122,12 @@ class RegistrarAlumnoActivity : AppCompatActivity() {
                             notifyDataSetChanged()
                         }
                     }
+                }
+
+                view.findViewById<Button>(R.id.btnCalificar).setOnClickListener {
+                    val intent = Intent(this@RegistrarAlumnoActivity, RegistrarNotaDesdeEstudianteActivity::class.java)
+                    intent.putExtra("CUI_ESTUDIANTE", estudiante.cui)
+                    startActivity(intent)
                 }
 
                 return view
