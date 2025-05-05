@@ -9,7 +9,10 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.edugtapp.R
 
-class CursoAdapter(private val cursos: List<String>) : RecyclerView.Adapter<CursoAdapter.CursoViewHolder>() {
+class CursoAdapter(
+    private val cursos: List<Pair<Int, String>>,
+    private val onCursoClick: (cursoId: Int, nombreCurso: String) -> Unit
+) : RecyclerView.Adapter<CursoAdapter.CursoViewHolder>() {
 
     private val colores = listOf(
         "#FFCDD2", "#F8BBD0", "#E1BEE7", "#D1C4E9",
@@ -23,11 +26,13 @@ class CursoAdapter(private val cursos: List<String>) : RecyclerView.Adapter<Curs
     }
 
     override fun onBindViewHolder(holder: CursoViewHolder, position: Int) {
-        val curso = cursos[position]
-        holder.tvNombreCurso.text = "Calificar\n${curso.uppercase()}"
+        val (cursoId, nombreCurso) = cursos[position]
+        holder.tvNombreCurso.text = "Calificar\n${nombreCurso.uppercase()}"
+        holder.cardCurso.setCardBackgroundColor(Color.parseColor(colores[position % colores.size]))
 
-        val color = Color.parseColor(colores[position % colores.size])
-        holder.cardCurso.setCardBackgroundColor(color)
+        holder.cardCurso.setOnClickListener {
+            onCursoClick(cursoId, nombreCurso)
+        }
     }
 
     override fun getItemCount(): Int = cursos.size
