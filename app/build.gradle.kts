@@ -54,6 +54,9 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
 
+    // CardView para tarjetas y encabezado con esquinas redondeadas
+    implementation("androidx.cardview:cardview:1.0.0")
+
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

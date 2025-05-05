@@ -35,7 +35,8 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
         EstudianteService.obtenerEstudiantePorCui(cui) { estudiante ->
             runOnUiThread {
                 if (estudiante != null) {
-                    tvEstudianteNombre.text = "${estudiante.nombre} ${estudiante.apellido}"
+                    val nombreCompleto = "${estudiante.nombre} ${estudiante.apellido}".uppercase()
+                    tvEstudianteNombre.text = nombreCompleto
                     gradoId = estudiante.gradoId
                     cargarCursosPorGrado(gradoId)
                 } else {
@@ -49,11 +50,11 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
     private fun cargarCursosPorGrado(gradoId: Int) {
         CursoService.obtenerCursosPorGrado(gradoId) { jsonArray ->
             runOnUiThread {
-                val lista = (0 until jsonArray.length()).map {
+                val listaCursos = (0 until jsonArray.length()).map {
                     val obj = jsonArray.getJSONObject(it)
                     obj.getString("nombreCurso")
                 }
-                rvCursos.adapter = CursoAdapter(lista)
+                rvCursos.adapter = CursoAdapter(listaCursos)
             }
         }
     }

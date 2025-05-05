@@ -24,7 +24,7 @@ class CursoAdapter(private val cursos: List<String>) : RecyclerView.Adapter<Curs
 
     override fun onBindViewHolder(holder: CursoViewHolder, position: Int) {
         val curso = cursos[position]
-        holder.tvNombreCurso.text = curso
+        holder.tvNombreCurso.text = "Calificar\n${curso.uppercase()}"
 
         val color = Color.parseColor(colores[position % colores.size])
         holder.cardCurso.setCardBackgroundColor(color)

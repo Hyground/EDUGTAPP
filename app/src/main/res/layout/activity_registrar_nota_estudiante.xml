@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="24dp"
+    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <TextView
-        android:id="@+id/tvEstudianteNombre"
-        android:layout_width="wrap_content"
+    <!-- Encabezado con fondo redondeado -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nombre del estudiante"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:paddingBottom="12dp" />
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
+        android:elevation="4dp"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="#91FF85"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true">
 
+        <TextView
+            android:id="@+id/tvEstudianteNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Nombre del estudiante"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#040000"
+            android:gravity="center" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Lista de cursos -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCursos"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="12dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:contentDescription="Listado de cursos disponibles para calificar" />
 </LinearLayout>
