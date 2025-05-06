@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.edugtapp.R
 import com.example.edugtapp.network.NotaService
 import org.json.JSONObject
-import kotlin.random.Random
 
 class ActividadAdapter(
     private val actividades: MutableList<JSONObject>,
@@ -31,9 +30,7 @@ class ActividadAdapter(
         val actividad = actividades[position]
         val context = holder.itemView.context
 
-        // Colores aleatorios en cada tarjeta
         holder.itemView.setBackgroundColor(generarColorAleatorio())
-
         holder.tvNombre.text = actividad.getString("nombre")
         holder.tvTipo.text = context.getString(R.string.tipo_formato, actividad.getString("tipo"))
 
@@ -86,15 +83,14 @@ class ActividadAdapter(
         val dialog = AlertDialog.Builder(context)
             .setTitle(if (notaExistente >= 0) "Actualizar Nota" else "Calificar Actividad")
             .setView(editText)
-            .setPositiveButton("Guardar", null) // Importante, null aquí
+            .setPositiveButton("Guardar", null)
             .setNegativeButton("Cancelar", null)
             .create()
 
         dialog.setOnShowListener {
             val buttonGuardar = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             buttonGuardar.setOnClickListener {
-                val notaTexto = editText.text.toString()
-                val valor = notaTexto.toDoubleOrNull()
+                val valor = editText.text.toString().toDoubleOrNull()
 
                 if (valor != null && valor in 0.0..ponderacionMaxima) {
                     val notaJson = JSONObject().apply {
@@ -108,19 +104,19 @@ class ActividadAdapter(
                             if (exito) {
                                 Toast.makeText(context, "Nota guardada correctamente.", Toast.LENGTH_SHORT).show()
                                 onNotaGuardada(valor)
-                                dialog.dismiss() // Ahora sí cierra el diálogo solo si tiene éxito
+                                dialog.dismiss()
                             } else {
                                 Toast.makeText(context, "Error al guardar la nota.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                 } else {
+                    editText.error = "Ingrese una nota válida entre 0 y $ponderacionMaxima"
                     Toast.makeText(
                         context,
                         "Nota no válida. Debe estar entre 0 y $ponderacionMaxima.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    editText.error = "Ingrese una nota válida"
                 }
             }
         }
@@ -128,8 +124,6 @@ class ActividadAdapter(
         dialog.show()
     }
 
-
-    // Genera colores suaves aleatorios para las tarjetas
     private fun generarColorAleatorio(): Int {
         val coloresSuaves = listOf(
             "#FFCDD2", "#F8BBD0", "#E1BEE7", "#D1C4E9",
