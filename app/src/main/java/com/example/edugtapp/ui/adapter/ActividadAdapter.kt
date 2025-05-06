@@ -2,6 +2,7 @@ package com.example.edugtapp.ui.adapter
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.edugtapp.R
 import com.example.edugtapp.network.NotaService
 import org.json.JSONObject
+import kotlin.random.Random
 
 class ActividadAdapter(
     private val actividades: MutableList<JSONObject>,
@@ -29,9 +31,14 @@ class ActividadAdapter(
         val actividad = actividades[position]
         val context = holder.itemView.context
 
+        // Colores aleatorios en cada tarjeta
+        holder.itemView.setBackgroundColor(generarColorAleatorio())
+
         holder.tvNombre.text = actividad.getString("nombre")
         holder.tvTipo.text = context.getString(R.string.tipo_formato, actividad.getString("tipo"))
-        holder.tvPonderacion.text = context.getString(R.string.ponderacion_formato, actividad.getDouble("ponderacion"))
+
+        val ponderacion = actividad.getDouble("ponderacion")
+        holder.tvPonderacion.text = context.getString(R.string.ponderacion_formato, ponderacion)
 
         val nota = actividad.optDouble("nota", -1.0)
         if (nota >= 0) {
@@ -42,8 +49,8 @@ class ActividadAdapter(
         }
 
         holder.itemView.setOnClickListener {
-            mostrarDialogoCalificacion(context, actividad, cuiEstudiante) {
-                actividad.put("nota", it) // actualizar nota localmente
+            mostrarDialogoCalificacion(context, actividad, cuiEstudiante, ponderacion) {
+                actividad.put("nota", it)
                 notifyItemChanged(position)
             }
         }
@@ -58,10 +65,17 @@ class ActividadAdapter(
         val tvNota: TextView = view.findViewById(R.id.tvNota)
     }
 
-    private fun mostrarDialogoCalificacion(context: Context, actividad: JSONObject, cuiEstudiante: String, onNotaGuardada: (Double) -> Unit) {
-        val editText = EditText(context)
-        editText.hint = "Ingrese nota (ej. 8.5)"
-        editText.inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+    private fun mostrarDialogoCalificacion(
+        context: Context,
+        actividad: JSONObject,
+        cuiEstudiante: String,
+        ponderacionMaxima: Double,
+        onNotaGuardada: (Double) -> Unit
+    ) {
+        val editText = EditText(context).apply {
+            hint = "Nota (máx. $ponderacionMaxima)"
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+        }
 
         val evaluacionId = actividad.getInt("evaluacionId")
         val notaExistente = actividad.optDouble("nota", -1.0)
@@ -69,14 +83,20 @@ class ActividadAdapter(
             editText.setText(notaExistente.toString())
         }
 
-        AlertDialog.Builder(context)
+        val dialog = AlertDialog.Builder(context)
             .setTitle(if (notaExistente >= 0) "Actualizar Nota" else "Calificar Actividad")
             .setView(editText)
-            .setPositiveButton("Guardar") { _, _ ->
+            .setPositiveButton("Guardar", null) // Importante, null aquí
+            .setNegativeButton("Cancelar", null)
+            .create()
+
+        dialog.setOnShowListener {
+            val buttonGuardar = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            buttonGuardar.setOnClickListener {
                 val notaTexto = editText.text.toString()
                 val valor = notaTexto.toDoubleOrNull()
 
-                if (valor != null && valor in 0.0..100.0) {
+                if (valor != null && valor in 0.0..ponderacionMaxima) {
                     val notaJson = JSONObject().apply {
                         put("evaluacion", JSONObject().put("id", evaluacionId))
                         put("estudiante", JSONObject().put("cui", cuiEstudiante))
@@ -86,18 +106,37 @@ class ActividadAdapter(
                     NotaService.enviarNota(notaJson) { exito ->
                         (context as? AppCompatActivity)?.runOnUiThread {
                             if (exito) {
-                                Toast.makeText(context, "Nota guardada", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Nota guardada correctamente.", Toast.LENGTH_SHORT).show()
                                 onNotaGuardada(valor)
+                                dialog.dismiss() // Ahora sí cierra el diálogo solo si tiene éxito
                             } else {
-                                Toast.makeText(context, "Error al guardar nota", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Error al guardar la nota.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                 } else {
-                    Toast.makeText(context, "Ingrese una nota válida entre 0 y 100", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Nota no válida. Debe estar entre 0 y $ponderacionMaxima.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    editText.error = "Ingrese una nota válida"
                 }
             }
-            .setNegativeButton("Cancelar", null)
-            .show()
+        }
+
+        dialog.show()
+    }
+
+
+    // Genera colores suaves aleatorios para las tarjetas
+    private fun generarColorAleatorio(): Int {
+        val coloresSuaves = listOf(
+            "#FFCDD2", "#F8BBD0", "#E1BEE7", "#D1C4E9",
+            "#C5CAE9", "#BBDEFB", "#B3E5FC", "#B2EBF2",
+            "#B2DFDB", "#C8E6C9", "#DCEDC8", "#F0F4C3",
+            "#FFECB3", "#FFE0B2", "#FFCCBC", "#D7CCC8"
+        )
+        return Color.parseColor(coloresSuaves.random())
     }
 }
