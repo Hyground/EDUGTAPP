@@ -1,5 +1,7 @@
 package com.example.edugtapp.ui
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -103,10 +105,16 @@ class RegistrarActividadActivity : AppCompatActivity() {
 
                 val opciones = view.findViewById<LinearLayout>(R.id.opcionesLayoutActividad)
                 opciones.visibility = if (position == itemExpandido) View.VISIBLE else View.GONE
-                view.setBackgroundResource(
-                    if (position == itemExpandido) R.drawable.bg_estudiante_card_selected
-                    else R.drawable.bg_estudiante_card
+
+                val colores = listOf(
+                    "#FFCDD2", "#F8BBD0", "#E1BEE7", "#D1C4E9",
+                    "#C5CAE9", "#BBDEFB", "#B3E5FC", "#B2EBF2",
+                    "#B2DFDB", "#C8E6C9", "#DCEDC8", "#F0F4C3",
+                    "#FFECB3", "#FFE0B2", "#FFCCBC"
                 )
+                val color = Color.parseColor(colores[position % colores.size])
+                val fondo = view.background?.mutate() as? GradientDrawable
+                fondo?.setColor(color)
 
                 view.setOnClickListener {
                     itemExpandido = if (itemExpandido == position) -1 else position
@@ -256,7 +264,6 @@ class RegistrarActividadActivity : AppCompatActivity() {
         }
 
         if (indexEnEdicion != -1) {
-            // Modo edición (frontend)
             actividades[indexEnEdicion] = mapOf(
                 "nombre" to nombre,
                 "tipo" to tipo,
@@ -266,7 +273,6 @@ class RegistrarActividadActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
             limpiarFormulario()
         } else {
-            // Crear nueva (esto sí se manda al backend)
             ActividadService.crearActividad(docenteInfo.gradoId, docenteInfo.seccionId, cursoId, bimestreId, nombre, tipo, ponderacion) {
                 runOnUiThread {
                     Toast.makeText(this, "Actividad registrada", Toast.LENGTH_SHORT).show()
