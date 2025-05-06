@@ -3,10 +3,12 @@ package com.example.edugtapp.ui.adapter
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,8 +19,16 @@ import org.json.JSONObject
 
 class ActividadAdapter(
     private val actividades: MutableList<JSONObject>,
-    private val cuiEstudiante: String
+    private val cuiEstudiante: String,
+    private val onCambioNota: () -> Unit
 ) : RecyclerView.Adapter<ActividadAdapter.ActividadViewHolder>() {
+
+    private val coloresFijos = listOf(
+        "#FFCDD2", "#F8BBD0", "#E1BEE7", "#D1C4E9",
+        "#C5CAE9", "#BBDEFB", "#B3E5FC", "#B2EBF2",
+        "#B2DFDB", "#C8E6C9", "#DCEDC8", "#F0F4C3",
+        "#FFECB3", "#FFE0B2", "#FFCCBC"
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActividadViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -30,25 +40,30 @@ class ActividadAdapter(
         val actividad = actividades[position]
         val context = holder.itemView.context
 
-        holder.itemView.setBackgroundColor(generarColorAleatorio())
-        holder.tvNombre.text = actividad.getString("nombre")
-        holder.tvTipo.text = context.getString(R.string.tipo_formato, actividad.getString("tipo"))
+        val color = Color.parseColor(coloresFijos[position % coloresFijos.size])
+        holder.layoutActividad.background?.setTint(color)
 
-        val ponderacion = actividad.getDouble("ponderacion")
-        holder.tvPonderacion.text = context.getString(R.string.ponderacion_formato, ponderacion)
+        holder.tvNombre.text = actividad.getString("nombre")
 
         val nota = actividad.optDouble("nota", -1.0)
         if (nota >= 0) {
             holder.tvNota.visibility = View.VISIBLE
-            holder.tvNota.text = context.getString(R.string.nota_obtenida_formato, nota)
+            holder.tvNota.text = "Nota obtenida: ${nota.toInt()}"
+            holder.tvNota.setTypeface(null, Typeface.BOLD)
         } else {
             holder.tvNota.visibility = View.GONE
         }
+
+        holder.tvTipo.text = "Tipo: ${actividad.getString("tipo")}"
+
+        val ponderacion = actividad.getDouble("ponderacion")
+        holder.tvPonderacion.text = "Ponderación: ${ponderacion.toInt()}"
 
         holder.itemView.setOnClickListener {
             mostrarDialogoCalificacion(context, actividad, cuiEstudiante, ponderacion) {
                 actividad.put("nota", it)
                 notifyItemChanged(position)
+                onCambioNota()
             }
         }
     }
@@ -56,6 +71,7 @@ class ActividadAdapter(
     override fun getItemCount(): Int = actividades.size
 
     class ActividadViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val layoutActividad: LinearLayout = view.findViewById(R.id.layoutActividad)
         val tvNombre: TextView = view.findViewById(R.id.tvNombre)
         val tvTipo: TextView = view.findViewById(R.id.tvTipo)
         val tvPonderacion: TextView = view.findViewById(R.id.tvPonderacion)
@@ -122,15 +138,5 @@ class ActividadAdapter(
         }
 
         dialog.show()
-    }
-
-    private fun generarColorAleatorio(): Int {
-        val coloresSuaves = listOf(
-            "#FFCDD2", "#F8BBD0", "#E1BEE7", "#D1C4E9",
-            "#C5CAE9", "#BBDEFB", "#B3E5FC", "#B2EBF2",
-            "#B2DFDB", "#C8E6C9", "#DCEDC8", "#F0F4C3",
-            "#FFECB3", "#FFE0B2", "#FFCCBC", "#D7CCC8"
-        )
-        return Color.parseColor(coloresSuaves.random())
     }
 }

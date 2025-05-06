@@ -21,6 +21,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
     private lateinit var tvEstudianteNombre: TextView
     private lateinit var tvCursoSeleccionado: TextView
     private lateinit var tvBimestreSeleccionado: TextView
+    private lateinit var tvResumenNotas: TextView
     private lateinit var rvCursos: RecyclerView
     private lateinit var rvBimestres: RecyclerView
     private lateinit var rvActividades: RecyclerView
@@ -41,6 +42,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
         tvEstudianteNombre = findViewById(R.id.tvEstudianteNombre)
         tvCursoSeleccionado = findViewById(R.id.tvCursoSeleccionado)
         tvBimestreSeleccionado = findViewById(R.id.tvBimestreSeleccionado)
+        tvResumenNotas = findViewById(R.id.tvResumenNotas)
         rvCursos = findViewById(R.id.rvCursos)
         rvBimestres = findViewById(R.id.rvBimestres)
         rvActividades = findViewById(R.id.rvActividades)
@@ -56,7 +58,11 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
         EstudianteService.obtenerEstudiantePorCui(cui) { estudiante ->
             runOnUiThread {
                 if (estudiante != null) {
-                    val nombreCompleto = getString(R.string.nombre_formato, estudiante.nombre, estudiante.apellido).uppercase()
+                    val nombreCompleto = getString(
+                        R.string.nombre_formato,
+                        estudiante.nombre,
+                        estudiante.apellido
+                    ).uppercase()
                     tvEstudianteNombre.text = nombreCompleto
                     gradoId = estudiante.gradoId
                     seccionId = estudiante.seccionId
@@ -80,6 +86,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
                 rvCursos.visibility = View.VISIBLE
                 rvBimestres.visibility = View.GONE
                 rvActividades.visibility = View.GONE
+                tvResumenNotas.visibility = View.GONE
 
                 rvCursos.adapter = CursoAdapter(listaCursos) { cursoId, nombreCurso ->
                     cursoSeleccionadoId = cursoId
@@ -102,6 +109,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
         rvCursos.visibility = View.GONE
         rvBimestres.visibility = View.VISIBLE
         rvActividades.visibility = View.GONE
+        tvResumenNotas.visibility = View.GONE
 
         rvBimestres.adapter = BimestreAdapter(listaBimestres) { bimestreId, nombreBimestre ->
             nombreBimestreSeleccionado = nombreBimestre
@@ -116,18 +124,44 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
         ) { evaluacionesArray ->
             runOnUiThread {
                 rvBimestres.visibility = View.GONE
+
                 if (evaluacionesArray.length() == 0) {
                     Toast.makeText(this, "No hay evaluaciones registradas", Toast.LENGTH_SHORT).show()
                     rvActividades.visibility = View.GONE
+                    tvResumenNotas.visibility = View.GONE
                 } else {
                     val listaEvaluaciones = mutableListOf<JSONObject>()
                     for (i in 0 until evaluacionesArray.length()) {
                         listaEvaluaciones.add(evaluacionesArray.getJSONObject(i))
                     }
-                    rvActividades.adapter = ActividadAdapter(listaEvaluaciones, estudianteCui)
+
+                    rvActividades.adapter = ActividadAdapter(listaEvaluaciones, estudianteCui) {
+                        recalcularResumenNotas(listaEvaluaciones)
+                    }
+
                     rvActividades.visibility = View.VISIBLE
+                    tvResumenNotas.visibility = View.VISIBLE
+                    recalcularResumenNotas(listaEvaluaciones)
                 }
             }
         }
+    }
+
+    private fun recalcularResumenNotas(listaEvaluaciones: List<JSONObject>) {
+        var totalNota = 0.0
+        var totalPonderacion = 0.0
+
+        for (evaluacion in listaEvaluaciones) {
+            totalPonderacion += evaluacion.optDouble("ponderacion", 0.0)
+            val nota = evaluacion.optDouble("nota", -1.0)
+            if (nota >= 0) totalNota += nota
+        }
+
+        val resumenTexto = getString(
+            R.string.resumen_notas_formato,
+            totalNota.toInt(),
+            totalPonderacion.toInt()
+        )
+        tvResumenNotas.text = resumenTexto
     }
 }

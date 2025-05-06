@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutActividad"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -17,6 +18,14 @@
         android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="#000000" />
+    <TextView
+        android:id="@+id/tvNota"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nota obtenida: 80"
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tvTipo"
@@ -34,13 +43,6 @@
         android:textSize="14sp"
         android:textColor="#555555" />
 
-    <TextView
-        android:id="@+id/tvNota"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nota obtenida: 80"
-        android:textSize="14sp"
-        android:textColor="#000000"
-        android:visibility="gone" />
+
 
 </LinearLayout>
