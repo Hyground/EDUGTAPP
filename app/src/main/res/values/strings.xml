@@ -10,4 +10,10 @@
     <string name="text_docente_placeholder">Docente</string>
     <string name="text_grado_seccion_placeholder">Grado - Sección</string>
     <string name="text_estudiantes_placeholder">Estudiantes: -</string>
+    <string name="tipo_formato">Tipo: %1$s</string>
+    <string name="ponderacion_formato">Ponderación: %1$.1f %%</string>
+    <string name="nota_obtenida_formato">Nota obtenida: %1$.1f</string>
+    <string name="nombre_formato">%1$s %2$s</string>
+    <string name="curso_formato">Curso: %1$s</string>
+    <string name="bimestre_formato">Bimestre: %1$s</string>
 </resources>

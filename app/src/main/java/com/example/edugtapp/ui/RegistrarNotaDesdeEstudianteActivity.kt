@@ -8,12 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.edugtapp.R
-import com.example.edugtapp.network.ActividadService
 import com.example.edugtapp.network.CursoService
 import com.example.edugtapp.network.EstudianteService
+import com.example.edugtapp.network.NotaService
 import com.example.edugtapp.ui.adapter.ActividadAdapter
 import com.example.edugtapp.ui.adapter.BimestreAdapter
 import com.example.edugtapp.ui.adapter.CursoAdapter
+import org.json.JSONObject
 
 class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
 
@@ -46,7 +47,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
 
         rvCursos.layoutManager = GridLayoutManager(this, 2)
         rvBimestres.layoutManager = GridLayoutManager(this, 2)
-        rvActividades.layoutManager = GridLayoutManager(this, 1)
+        rvActividades.layoutManager = GridLayoutManager(this, 2)
 
         cargarDatosEstudiante(estudianteCui)
     }
@@ -55,7 +56,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
         EstudianteService.obtenerEstudiantePorCui(cui) { estudiante ->
             runOnUiThread {
                 if (estudiante != null) {
-                    val nombreCompleto = "${estudiante.nombre} ${estudiante.apellido}".uppercase()
+                    val nombreCompleto = getString(R.string.nombre_formato, estudiante.nombre, estudiante.apellido).uppercase()
                     tvEstudianteNombre.text = nombreCompleto
                     gradoId = estudiante.gradoId
                     seccionId = estudiante.seccionId
@@ -83,7 +84,7 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
                 rvCursos.adapter = CursoAdapter(listaCursos) { cursoId, nombreCurso ->
                     cursoSeleccionadoId = cursoId
                     nombreCursoSeleccionado = nombreCurso
-                    tvCursoSeleccionado.text = "Curso: $nombreCursoSeleccionado"
+                    tvCursoSeleccionado.text = getString(R.string.curso_formato, nombreCursoSeleccionado)
                     mostrarBimestres()
                 }
             }
@@ -104,29 +105,26 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
 
         rvBimestres.adapter = BimestreAdapter(listaBimestres) { bimestreId, nombreBimestre ->
             nombreBimestreSeleccionado = nombreBimestre
-            tvBimestreSeleccionado.text = "Bimestre: $nombreBimestreSeleccionado"
+            tvBimestreSeleccionado.text = getString(R.string.bimestre_formato, nombreBimestreSeleccionado)
             cargarActividades(bimestreId)
         }
     }
 
     private fun cargarActividades(bimestreId: Int) {
-        ActividadService.obtenerActividades(
-            gradoId,
-            seccionId,
-            cursoSeleccionadoId,
-            bimestreId
-        ) { actividadesArray ->
+        NotaService.obtenerEvaluacionesConNota(
+            gradoId, seccionId, cursoSeleccionadoId, bimestreId, estudianteCui
+        ) { evaluacionesArray ->
             runOnUiThread {
                 rvBimestres.visibility = View.GONE
-                if (actividadesArray.length() == 0) {
-                    Toast.makeText(this, "No hay actividades registradas", Toast.LENGTH_SHORT).show()
+                if (evaluacionesArray.length() == 0) {
+                    Toast.makeText(this, "No hay evaluaciones registradas", Toast.LENGTH_SHORT).show()
                     rvActividades.visibility = View.GONE
                 } else {
-                    val listaActividades = (0 until actividadesArray.length()).map {
-                        actividadesArray.getJSONObject(it)
+                    val listaEvaluaciones = mutableListOf<JSONObject>()
+                    for (i in 0 until evaluacionesArray.length()) {
+                        listaEvaluaciones.add(evaluacionesArray.getJSONObject(i))
                     }
-
-                    rvActividades.adapter = ActividadAdapter(listaActividades)
+                    rvActividades.adapter = ActividadAdapter(listaEvaluaciones, estudianteCui)
                     rvActividades.visibility = View.VISIBLE
                 }
             }
