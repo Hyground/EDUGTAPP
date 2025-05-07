@@ -3,6 +3,7 @@ package com.example.edugtapp.ui
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,8 +35,8 @@ class RegistrarActividadActivity : AppCompatActivity() {
     private lateinit var btnCancelar: Button
 
     private val bimestres = listOf(
-        Pair(1, "I BIMESTRE"), Pair(2, "II BIMESTRE"),
-        Pair(3, "III BIMESTRE"), Pair(4, "IV BIMESTRE")
+        1 to "I BIMESTRE", 2 to "II BIMESTRE",
+        3 to "III BIMESTRE", 4 to "IV BIMESTRE"
     )
 
     private lateinit var docenteInfo: DocenteInfo
@@ -47,6 +48,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
     private lateinit var adapter: BaseAdapter
     private var itemExpandido = -1
     private var indexEnEdicion = -1
+    private var idActividadEnEdicion: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,7 +135,20 @@ class RegistrarActividadActivity : AppCompatActivity() {
                 }
 
                 view.findViewById<Button>(R.id.btnEliminarActividad).setOnClickListener {
-                    Toast.makeText(this@RegistrarActividadActivity, "Eliminar no implementado", Toast.LENGTH_SHORT).show()
+                    val id = actividad["id"]?.toIntOrNull()
+                    if (id != null) {
+                        ActividadService.eliminarActividad(id) {
+                            runOnUiThread {
+                                Toast.makeText(this@RegistrarActividadActivity, "Actividad eliminada", Toast.LENGTH_SHORT).show()
+                                if (indexEnEdicion == position || idActividadEnEdicion == id) {
+                                    limpiarFormulario()
+                                }
+                                refrescarActividades()
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this@RegistrarActividadActivity, "ID inválido", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 view.findViewById<Button>(R.id.btnCalificarActividad).setOnClickListener {
@@ -150,6 +165,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
         edtPonderacion.setText(act["ponderacion"])
         if (act["tipo"] == "Actividad") rbActividad.isChecked = true
         if (act["tipo"] == "Evaluacion") rbEvaluacion.isChecked = true
+        idActividadEnEdicion = act["id"]?.toIntOrNull()
     }
 
     private fun cargarCursos() {
@@ -196,7 +212,6 @@ class RegistrarActividadActivity : AppCompatActivity() {
 
     private fun mostrarCursos() {
         val nombres = tvSeleccionCurso.tag as? List<String> ?: return
-
         val dialog = BottomSheetDialog(this)
         val view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_lista, null)
         val list = view.findViewById<ListView>(R.id.listaOpciones)
@@ -235,6 +250,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
                     val act = jsonArray.getJSONObject(i)
                     actividades.add(
                         mapOf(
+                            "id" to act.getInt("id").toString(),
                             "nombre" to act.getString("nombre"),
                             "tipo" to act.getString("tipo"),
                             "ponderacion" to act.getDouble("ponderacion").toString()
@@ -263,15 +279,24 @@ class RegistrarActividadActivity : AppCompatActivity() {
             return
         }
 
-        if (indexEnEdicion != -1) {
-            actividades[indexEnEdicion] = mapOf(
-                "nombre" to nombre,
-                "tipo" to tipo,
-                "ponderacion" to ponderacion.toString()
-            )
-            Toast.makeText(this, "Actividad actualizada", Toast.LENGTH_SHORT).show()
-            adapter.notifyDataSetChanged()
-            limpiarFormulario()
+        if (indexEnEdicion != -1 && idActividadEnEdicion != null) {
+            Log.d("RegistrarActividad", "Actualizando ID $idActividadEnEdicion con nombre=$nombre, tipo=$tipo, ponderación=$ponderacion")
+            ActividadService.actualizarActividad(
+                idActividadEnEdicion!!,
+                docenteInfo.gradoId,
+                docenteInfo.seccionId,
+                cursoId,
+                bimestreId,
+                nombre,
+                tipo,
+                ponderacion
+            ) {
+                runOnUiThread {
+                    Toast.makeText(this, "Actividad actualizada", Toast.LENGTH_SHORT).show()
+                    limpiarFormulario()
+                    refrescarActividades()
+                }
+            }
         } else {
             ActividadService.crearActividad(docenteInfo.gradoId, docenteInfo.seccionId, cursoId, bimestreId, nombre, tipo, ponderacion) {
                 runOnUiThread {
@@ -287,6 +312,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
         formulario.visibility = View.VISIBLE
         btnAdd.hide()
         indexEnEdicion = -1
+        idActividadEnEdicion = null
     }
 
     private fun limpiarFormulario() {
@@ -296,5 +322,6 @@ class RegistrarActividadActivity : AppCompatActivity() {
         edtPonderacion.text.clear()
         rgTipo.clearCheck()
         indexEnEdicion = -1
+        idActividadEnEdicion = null
     }
 }

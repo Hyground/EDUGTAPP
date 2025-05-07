@@ -83,4 +83,61 @@ object ActividadService {
             }
         })
     }
+
+    fun actualizarActividad(
+        id: Int,
+        gradoId: Int,
+        seccionId: Int,
+        cursoId: Int,
+        bimestreId: Int,
+        nombre: String,
+        tipo: String,
+        ponderacion: Double,
+        callback: () -> Unit
+    ) {
+        val json = JSONObject().apply {
+            put("id", id)
+            put("nombre", nombre)
+            put("tipo", tipo)
+            put("ponderacion", ponderacion)
+            put("grado", JSONObject().put("id", gradoId))
+            put("seccion", JSONObject().put("id", seccionId))
+            put("curso", JSONObject().put("id", cursoId))
+            put("bimestre", JSONObject().put("id", bimestreId))
+        }
+
+        Log.d("ActividadService", "Enviando PUT para actualizar: $json")
+
+        val body = RequestBody.create("application/json".toMediaTypeOrNull(), json.toString())
+        val request = Request.Builder().url("$BASE_URL/$id").put(body).build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("ActividadService", "Fallo al actualizar actividad: ${e.message}")
+                callback()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.d("ActividadService", "Actividad actualizada, código: ${response.code}")
+                callback()
+            }
+        })
+    }
+
+    fun eliminarActividad(id: Int, callback: () -> Unit) {
+        val request = Request.Builder().url("$BASE_URL/$id").delete().build()
+        Log.d("ActividadService", "Enviando DELETE para ID: $id")
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("ActividadService", "Fallo al eliminar actividad: ${e.message}")
+                callback()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.d("ActividadService", "Actividad eliminada, código: ${response.code}")
+                callback()
+            }
+        })
+    }
 }
