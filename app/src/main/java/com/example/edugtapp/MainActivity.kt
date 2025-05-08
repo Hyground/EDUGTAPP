@@ -11,33 +11,38 @@ import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var etUsuario: EditText
-    private lateinit var etContrasenia: EditText
-    private lateinit var btnLogin: Button
+    private lateinit var usernameEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var loginButton: Button
+
+    // Si decides volver a usar estos, agrégalos al XML
     private lateinit var tvResultado: TextView
     private lateinit var progressBar: ProgressBar
+
     private val loginService = LoginService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         inicializarVistas()
-        btnLogin.setOnClickListener { iniciarSesion() }
+        loginButton.setOnClickListener { iniciarSesion() }
     }
 
     private fun inicializarVistas() {
-        etUsuario = findViewById(R.id.etUsuario)
-        etContrasenia = findViewById(R.id.etContrasenia)
-        btnLogin = findViewById(R.id.btnLogin)
-        tvResultado = findViewById(R.id.tvResultado)
-        progressBar = findViewById(R.id.progressBar)
+        usernameEditText = findViewById(R.id.usernameEditText)
+        passwordEditText = findViewById(R.id.passwordEditText)
+        loginButton = findViewById(R.id.loginButton)
+
+        // Solo descomenta si agregas estos elementos al XML
+        // tvResultado = findViewById(R.id.tvResultado)
+        // progressBar = findViewById(R.id.progressBar)
     }
 
     private fun iniciarSesion() {
-        val usuario = etUsuario.text.toString().trim()
-        val contrasenia = etContrasenia.text.toString().trim()
+        val usuario = usernameEditText.text.toString().trim()
+        val contrasenia = passwordEditText.text.toString().trim()
         if (usuario.isEmpty() || contrasenia.isEmpty()) {
-            tvResultado.text = "Ingrese usuario y contraseña"
+            Toast.makeText(this, "Ingrese usuario y contraseña", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -69,10 +74,10 @@ class MainActivity : AppCompatActivity() {
                     })
                     finish()
                 } else {
-                    tvResultado.text = "Respuesta inesperada del servidor"
+                    Toast.makeText(this, "Respuesta inesperada del servidor", Toast.LENGTH_SHORT).show()
                 }
             } catch (_: Exception) {
-                tvResultado.text = "Error procesando la respuesta"
+                Toast.makeText(this, "Error procesando la respuesta", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -80,16 +85,18 @@ class MainActivity : AppCompatActivity() {
     private fun mostrarError(error: String) {
         runOnUiThread {
             mostrarCarga(false)
-            tvResultado.text = if ("401" in error) {
+            val mensaje = if ("401" in error) {
                 "Usuario o contraseña incorrectos"
             } else {
                 error
             }
+            Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun mostrarCarga(mostrar: Boolean) {
-        progressBar.visibility = if (mostrar) View.VISIBLE else View.GONE
-        btnLogin.isEnabled = !mostrar
+        // Si no estás usando progressBar, puedes comentar estas líneas
+        // progressBar.visibility = if (mostrar) View.VISIBLE else View.GONE
+        loginButton.isEnabled = !mostrar
     }
 }
