@@ -43,6 +43,8 @@
         <activity android:name=".ui.RegistrarNotasActivity" />
         <activity android:name=".ui.CambiarFotoActivity" />
         <activity android:name=".ui.RegistrarNotaDesdeEstudianteActivity" />
+        <activity android:name=".ui.RegistrarNotaDesdeActividadActivity" />
+
 
 
         <!-- FileProvider (debe coincidir con tu file_paths.xml) -->

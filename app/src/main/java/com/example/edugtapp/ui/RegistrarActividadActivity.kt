@@ -1,5 +1,6 @@
 package com.example.edugtapp.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -152,8 +153,24 @@ class RegistrarActividadActivity : AppCompatActivity() {
                 }
 
                 view.findViewById<Button>(R.id.btnCalificarActividad).setOnClickListener {
-                    Toast.makeText(this@RegistrarActividadActivity, "Calificar no implementado", Toast.LENGTH_SHORT).show()
+                    val id = actividad["id"]?.toIntOrNull()
+                    val nombre = actividad["nombre"] ?: ""
+                    val cursoId = selectedCursoId
+                    val bimestreId = selectedBimestreId
+
+                    if (id != null && cursoId != null && bimestreId != null) {
+                        val intent = Intent(this@RegistrarActividadActivity, RegistrarNotaDesdeActividadActivity::class.java)
+                        intent.putExtra("idActividad", id)
+                        intent.putExtra("nombreActividad", nombre)
+                        intent.putExtra("gradoId", docenteInfo.gradoId)
+                        intent.putExtra("seccionId", docenteInfo.seccionId)
+                        docenteInfo.applyTo(intent) // ✅ esto garantiza que llegue correctamente el docenteId
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this@RegistrarActividadActivity, "Seleccione curso y bimestre", Toast.LENGTH_SHORT).show()
+                    }
                 }
+
 
                 return view
             }
@@ -280,7 +297,6 @@ class RegistrarActividadActivity : AppCompatActivity() {
         }
 
         if (indexEnEdicion != -1 && idActividadEnEdicion != null) {
-            Log.d("RegistrarActividad", "Actualizando ID $idActividadEnEdicion con nombre=$nombre, tipo=$tipo, ponderación=$ponderacion")
             ActividadService.actualizarActividad(
                 idActividadEnEdicion!!,
                 docenteInfo.gradoId,
@@ -298,7 +314,15 @@ class RegistrarActividadActivity : AppCompatActivity() {
                 }
             }
         } else {
-            ActividadService.crearActividad(docenteInfo.gradoId, docenteInfo.seccionId, cursoId, bimestreId, nombre, tipo, ponderacion) {
+            ActividadService.crearActividad(
+                docenteInfo.gradoId,
+                docenteInfo.seccionId,
+                cursoId,
+                bimestreId,
+                nombre,
+                tipo,
+                ponderacion
+            ) {
                 runOnUiThread {
                     Toast.makeText(this, "Actividad registrada", Toast.LENGTH_SHORT).show()
                     limpiarFormulario()

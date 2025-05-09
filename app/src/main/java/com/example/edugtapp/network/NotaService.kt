@@ -59,4 +59,24 @@ object NotaService {
             }
         })
     }
+    fun obtenerNotasDeActividad(actividadId: Int, callback: (JSONArray) -> Unit) {
+        val url = "$BASE_URL/por-actividad/$actividadId"
+        val request = Request.Builder().url(url).get().build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                callback(JSONArray())
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                try {
+                    callback(JSONArray(body ?: "[]"))
+                } catch (_: Exception) {
+                    callback(JSONArray())
+                }
+            }
+        })
+    }
+
 }
