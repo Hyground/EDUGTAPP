@@ -9,11 +9,14 @@ import com.example.edugtapp.network.Estudiante
 import com.example.edugtapp.network.EstudianteService
 import com.example.edugtapp.network.NotaService
 import org.json.JSONObject
-import android.util.Log
+import org.json.JSONArray
 
 class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
 
     private lateinit var tvNombreActividad: TextView
+    private lateinit var tvPonderacion: TextView
+    private lateinit var tvCurso: TextView
+    private lateinit var tvBimestre: TextView
     private lateinit var listEstudiantes: ListView
     private lateinit var btnGuardarNotas: Button
 
@@ -30,15 +33,24 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_nota_actividad)
 
+
         tvNombreActividad = findViewById(R.id.tvNombreActividad)
+        tvPonderacion = findViewById(R.id.tvPonderacion)
+        tvCurso = findViewById(R.id.tvCurso)
+        tvBimestre = findViewById(R.id.tvBimestre)
         listEstudiantes = findViewById(R.id.listEstudiantesActividad)
         btnGuardarNotas = findViewById(R.id.btnGuardarNotasActividad)
 
+        // Recibir datos
         idActividad = intent.getIntExtra("idActividad", -1)
         gradoId = intent.getIntExtra("gradoId", -1)
         seccionId = intent.getIntExtra("seccionId", -1)
         nombreActividad = intent.getStringExtra("nombreActividad") ?: ""
         docenteInfo = DocenteInfo.fromIntent(intent)
+
+        val ponderacion = intent.getDoubleExtra("ponderacionActividad", 0.0)
+        val nombreCurso = intent.getStringExtra("nombreCurso") ?: ""
+        val nombreBimestre = intent.getStringExtra("nombreBimestre") ?: ""
 
         if (idActividad == -1 || gradoId == -1 || seccionId == -1) {
             Toast.makeText(this, "Datos incompletos", Toast.LENGTH_SHORT).show()
@@ -46,9 +58,13 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
             return
         }
 
+        // Mostrar datos en pantalla
         tvNombreActividad.text = "Actividad: $nombreActividad"
-        cargarEstudiantesYNotas()
+        tvPonderacion.text = "Ponderación: ${ponderacion.toInt()}"
+        tvCurso.text = "Curso: $nombreCurso"
+        tvBimestre.text = "Bimestre: $nombreBimestre"
 
+        cargarEstudiantesYNotas()
         btnGuardarNotas.setOnClickListener { guardarNotas() }
     }
 
@@ -56,14 +72,12 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
         EstudianteService.obtenerEstudiantesPorDocente(docenteInfo.docenteId) { lista ->
             NotaService.obtenerNotasDeActividad(idActividad) { notasArray ->
                 runOnUiThread {
-                    Log.d("NotasDebug", "Notas recibidas: ${notasArray.length()}")
                     val notasExistentes = mutableMapOf<String, Double>()
                     for (i in 0 until notasArray.length()) {
                         val obj = notasArray.getJSONObject(i)
                         val estudianteObj = obj.optJSONObject("estudiante")
                         val cui = estudianteObj?.optString("cui") ?: ""
                         val nota = obj.optDouble("nota", -1.0)
-                        Log.d("NotasDebug", "Nota para $cui: $nota")
                         if (cui.isNotEmpty() && nota >= 0) {
                             notasExistentes[cui] = nota
                         }
@@ -113,36 +127,29 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
         }
     }
 
-
     private fun guardarNotas() {
         if (calificaciones.isEmpty()) {
             Toast.makeText(this, "No se ingresaron notas", Toast.LENGTH_SHORT).show()
             return
         }
 
-        var total = calificaciones.size
-        var exitosas = 0
-        var fallidas = 0
-
+        val jsonArray = JSONArray()
         for ((cui, nota) in calificaciones) {
             val json = JSONObject().apply {
                 put("cui", cui)
                 put("actividadId", idActividad)
                 put("nota", nota)
             }
+            jsonArray.put(json)
+        }
 
-            NotaService.enviarNota(json) { exito ->
-                runOnUiThread {
-                    if (exito) exitosas++ else fallidas++
-
-                    if (exitosas + fallidas == total) {
-                        if (fallidas == 0) {
-                            Toast.makeText(this, "Todas las notas guardadas correctamente", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(this, "$exitosas notas guardadas, $fallidas fallidas", Toast.LENGTH_LONG).show()
-                        }
-                        finish()
-                    }
+        NotaService.enviarNotasEnLote(jsonArray) { exito ->
+            runOnUiThread {
+                if (exito) {
+                    Toast.makeText(this, "Notas guardadas correctamente", Toast.LENGTH_LONG).show()
+                    finish()
+                } else {
+                    Toast.makeText(this, "Error al guardar notas", Toast.LENGTH_LONG).show()
                 }
             }
         }

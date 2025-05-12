@@ -164,13 +164,15 @@ class RegistrarActividadActivity : AppCompatActivity() {
                         intent.putExtra("nombreActividad", nombre)
                         intent.putExtra("gradoId", docenteInfo.gradoId)
                         intent.putExtra("seccionId", docenteInfo.seccionId)
-                        docenteInfo.applyTo(intent) // ✅ esto garantiza que llegue correctamente el docenteId
+                        intent.putExtra("ponderacionActividad", actividad["ponderacion"]?.toDoubleOrNull() ?: 0.0)
+                        intent.putExtra("nombreCurso", tvSeleccionCurso.text.toString())
+                        intent.putExtra("nombreBimestre", tvSeleccionBimestre.text.toString())
+                        docenteInfo.applyTo(intent)
                         startActivity(intent)
                     } else {
                         Toast.makeText(this@RegistrarActividadActivity, "Seleccione curso y bimestre", Toast.LENGTH_SHORT).show()
                     }
                 }
-
 
                 return view
             }

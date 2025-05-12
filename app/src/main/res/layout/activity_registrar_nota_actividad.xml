@@ -1,26 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
-    <TextView
-        android:id="@+id/tvNombreActividad"
-        android:text="Actividad: "
-        android:textSize="18sp"
+    <!-- Encabezado de la actividad -->
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp" />
+        android:layout_marginBottom="12dp"
+        android:elevation="4dp"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="#BBDEFB">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvNombreActividad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actividad: "
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvPonderacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ponderación: "
+                android:textSize="16sp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvCurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Curso: "
+                android:textSize="16sp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvBimestre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bimestre: "
+                android:textSize="16sp"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Lista de estudiantes -->
     <ListView
         android:id="@+id/listEstudiantesActividad"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"
+        android:paddingVertical="8dp" />
 
+    <!-- Botón de guardar -->
     <Button
         android:id="@+id/btnGuardarNotasActividad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Guardar Notas" />
+        android:text="Guardar Notas"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#4CAF50"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:elevation="2dp"/>
 </LinearLayout>

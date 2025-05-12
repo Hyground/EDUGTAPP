@@ -78,5 +78,25 @@ object NotaService {
             }
         })
     }
+    fun enviarNotasEnLote(jsonArray: JSONArray, callback: (Boolean) -> Unit) {
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val body = jsonArray.toString().toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .url("$BASE_URL/lote")
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                callback(false)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                callback(response.isSuccessful)
+            }
+        })
+    }
+
 
 }
