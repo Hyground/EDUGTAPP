@@ -1,6 +1,8 @@
 package com.example.edugtapp.ui
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.R
@@ -8,8 +10,8 @@ import com.example.edugtapp.model.DocenteInfo
 import com.example.edugtapp.network.Estudiante
 import com.example.edugtapp.network.EstudianteService
 import com.example.edugtapp.network.NotaService
-import org.json.JSONObject
 import org.json.JSONArray
+import org.json.JSONObject
 
 class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
 
@@ -28,11 +30,11 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
 
     private val estudiantes = mutableListOf<Estudiante>()
     private val calificaciones = mutableMapOf<String, Double>() // CUI -> Nota
+    private val notasExistentes = mutableMapOf<String, Double>() // para mantener la referencia
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_nota_actividad)
-
 
         tvNombreActividad = findViewById(R.id.tvNombreActividad)
         tvPonderacion = findViewById(R.id.tvPonderacion)
@@ -58,21 +60,24 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
             return
         }
 
-        // Mostrar datos en pantalla
+        // Mostrar datos
         tvNombreActividad.text = "Actividad: $nombreActividad"
         tvPonderacion.text = "Ponderación: ${ponderacion.toInt()}"
         tvCurso.text = "Curso: $nombreCurso"
         tvBimestre.text = "Bimestre: $nombreBimestre"
 
         cargarEstudiantesYNotas()
-        btnGuardarNotas.setOnClickListener { guardarNotas() }
+
+        btnGuardarNotas.setOnClickListener {
+            guardarNotas()
+        }
     }
 
     private fun cargarEstudiantesYNotas() {
         EstudianteService.obtenerEstudiantesPorDocente(docenteInfo.docenteId) { lista ->
             NotaService.obtenerNotasDeActividad(idActividad) { notasArray ->
                 runOnUiThread {
-                    val notasExistentes = mutableMapOf<String, Double>()
+                    // Cargar notas existentes
                     for (i in 0 until notasArray.length()) {
                         val obj = notasArray.getJSONObject(i)
                         val estudianteObj = obj.optJSONObject("estudiante")
@@ -95,26 +100,42 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
                         override fun getItem(position: Int) = estudiantes[position]
                         override fun getItemId(position: Int) = position.toLong()
 
-                        override fun getView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup?): android.view.View {
-                            val view = layoutInflater.inflate(R.layout.item_estudiante_calificacion, parent, false)
-                            val estudiante = estudiantes[position]
+                        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+                            val view: View
+                            val holder: ViewHolder
 
-                            view.findViewById<TextView>(R.id.tvNombreEstudiante).text =
-                                "${estudiante.nombre} ${estudiante.apellido}"
-
-                            val edtNota = view.findViewById<EditText>(R.id.edtNotaEstudiante)
-
-                            val notaActual = notasExistentes[estudiante.cui]
-                            if (notaActual != null) {
-                                edtNota.setText(notaActual.toString())
-                                calificaciones[estudiante.cui] = notaActual
+                            if (convertView == null) {
+                                view = layoutInflater.inflate(R.layout.item_estudiante_calificacion, parent, false)
+                                holder = ViewHolder(
+                                    tvNombreEstudiante = view.findViewById(R.id.tvNombreEstudiante),
+                                    edtNotaEstudiante = view.findViewById(R.id.edtNotaEstudiante)
+                                )
+                                view.tag = holder
+                            } else {
+                                view = convertView
+                                holder = view.tag as ViewHolder
                             }
 
-                            edtNota.setOnFocusChangeListener { _, hasFocus ->
+                            val estudiante = estudiantes[position]
+                            val cui = estudiante.cui
+
+                            holder.tvNombreEstudiante.text = "${estudiante.nombre} ${estudiante.apellido}"
+
+                            // Remover listeners antiguos para evitar duplicados
+                            holder.edtNotaEstudiante.setOnFocusChangeListener(null)
+
+                            // Mostrar nota si existe
+                            val notaExistente = calificaciones[cui] ?: notasExistentes[cui]
+                            holder.edtNotaEstudiante.setText(notaExistente?.toString() ?: "")
+
+                            // Guardar valor al perder el foco
+                            holder.edtNotaEstudiante.setOnFocusChangeListener { _, hasFocus ->
                                 if (!hasFocus) {
-                                    val nota = edtNota.text.toString().toDoubleOrNull()
+                                    val nota = holder.edtNotaEstudiante.text.toString().toDoubleOrNull()
                                     if (nota != null) {
-                                        calificaciones[estudiante.cui] = nota
+                                        calificaciones[cui] = nota
+                                    } else {
+                                        calificaciones.remove(cui)
                                     }
                                 }
                             }
@@ -154,4 +175,9 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
             }
         }
     }
+
+    data class ViewHolder(
+        val tvNombreEstudiante: TextView,
+        val edtNotaEstudiante: EditText
+    )
 }
