@@ -1,6 +1,7 @@
 package com.example.edugtapp
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -14,56 +15,84 @@ class MainActivity : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
+    private lateinit var rememberCheckBox: CheckBox
+    private lateinit var forgotPasswordText: TextView
 
-    // Si decides volver a usar estos, agrégalos al XML
-    private lateinit var tvResultado: TextView
-    private lateinit var progressBar: ProgressBar
-
+    private lateinit var sharedPrefs: SharedPreferences
     private val loginService = LoginService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        sharedPrefs = getSharedPreferences("eduPrefs", MODE_PRIVATE)
+
         inicializarVistas()
+        cargarUsuarioGuardado()
+
         loginButton.setOnClickListener { iniciarSesion() }
+
+        forgotPasswordText.setOnClickListener {
+            Toast.makeText(this, "Función aún no disponible", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun inicializarVistas() {
         usernameEditText = findViewById(R.id.usernameEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         loginButton = findViewById(R.id.loginButton)
+        rememberCheckBox = findViewById(R.id.rememberCheckBox)
+        forgotPasswordText = findViewById(R.id.forgotPasswordText)
+    }
 
-        // Solo descomenta si agregas estos elementos al XML
-        // tvResultado = findViewById(R.id.tvResultado)
-        // progressBar = findViewById(R.id.progressBar)
+    private fun cargarUsuarioGuardado() {
+        val guardado = sharedPrefs.getBoolean("RECORDAR", false)
+        if (guardado) {
+            usernameEditText.setText(sharedPrefs.getString("USUARIO", ""))
+            passwordEditText.setText(sharedPrefs.getString("CLAVE", ""))
+            rememberCheckBox.isChecked = true
+        }
     }
 
     private fun iniciarSesion() {
         val usuario = usernameEditText.text.toString().trim()
         val contrasenia = passwordEditText.text.toString().trim()
+
         if (usuario.isEmpty() || contrasenia.isEmpty()) {
             Toast.makeText(this, "Ingrese usuario y contraseña", Toast.LENGTH_SHORT).show()
             return
         }
 
-        mostrarCarga(true)
+        loginButton.isEnabled = false
+
         loginService.login(
             usuario, contrasenia,
-            onSuccess = { procesarRespuesta(it) },
+            onSuccess = { procesarRespuesta(it, usuario, contrasenia) },
             onError = { mostrarError(it) }
         )
     }
 
-    private fun procesarRespuesta(respuesta: String) {
+    private fun procesarRespuesta(respuesta: String, usuario: String, clave: String) {
         runOnUiThread {
-            mostrarCarga(false)
+            loginButton.isEnabled = true
             try {
                 val json = JSONObject(respuesta)
                 val nombreCompleto = json.optString("nombreCompleto")
                 val usuarioID = json.optInt("usuarioID", -1)
                 val grado = json.optJSONObject("grado")
                 val seccion = json.optJSONObject("seccion")
-                if (nombreCompleto != null && usuarioID != -1) {
+
+                if (usuarioID != -1) {
+                    if (rememberCheckBox.isChecked) {
+                        sharedPrefs.edit()
+                            .putBoolean("RECORDAR", true)
+                            .putString("USUARIO", usuario)
+                            .putString("CLAVE", clave)
+                            .apply()
+                    } else {
+                        sharedPrefs.edit().clear().apply()
+                    }
+
                     startActivity(Intent(this, MenuActivity::class.java).apply {
                         putExtra("NOMBRE_DOCENTE", nombreCompleto)
                         putExtra("DOCENTE_ID", usuarioID)
@@ -74,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                     })
                     finish()
                 } else {
-                    Toast.makeText(this, "Respuesta inesperada del servidor", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Respuesta inválida del servidor", Toast.LENGTH_SHORT).show()
                 }
             } catch (_: Exception) {
                 Toast.makeText(this, "Error procesando la respuesta", Toast.LENGTH_SHORT).show()
@@ -84,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun mostrarError(error: String) {
         runOnUiThread {
-            mostrarCarga(false)
+            loginButton.isEnabled = true
             val mensaje = if ("401" in error) {
                 "Usuario o contraseña incorrectos"
             } else {
@@ -92,11 +121,5 @@ class MainActivity : AppCompatActivity() {
             }
             Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun mostrarCarga(mostrar: Boolean) {
-        // Si no estás usando progressBar, puedes comentar estas líneas
-        // progressBar.visibility = if (mostrar) View.VISIBLE else View.GONE
-        loginButton.isEnabled = !mostrar
     }
 }
