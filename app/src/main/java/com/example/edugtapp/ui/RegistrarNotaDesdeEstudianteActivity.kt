@@ -100,10 +100,10 @@ class RegistrarNotaDesdeEstudianteActivity : AppCompatActivity() {
 
     private fun mostrarBimestres() {
         val listaBimestres = listOf(
-            Pair(1, "Bimestre 1"),
-            Pair(2, "Bimestre 2"),
-            Pair(3, "Bimestre 3"),
-            Pair(4, "Bimestre 4")
+            Pair(1, "I Bimestre"),
+            Pair(2, "II Bimestre"),
+            Pair(3, "III Bimestre"),
+            Pair(4, "IV Bimestre")
         )
 
         rvCursos.visibility = View.GONE

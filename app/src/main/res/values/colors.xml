@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="bimestre_1">#FFE082</color> <!-- amarillo claro -->
+    <color name="bimestre_2">#81D4FA</color> <!-- celeste -->
+    <color name="bimestre_3">#A5D6A7</color> <!-- verde claro -->
+    <color name="bimestre_4">#FFAB91</color> <!-- coral claro -->
+
 </resources>

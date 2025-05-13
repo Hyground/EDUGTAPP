@@ -47,6 +47,7 @@
 
 
 
+
         <!-- FileProvider (debe coincidir con tu file_paths.xml) -->
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -14,17 +14,31 @@ class BimestreAdapter(
 ) : RecyclerView.Adapter<BimestreAdapter.BimestreViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BimestreViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_curso, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_bimestre, parent, false)
         return BimestreViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: BimestreViewHolder, position: Int) {
         val (id, nombre) = bimestres[position]
         holder.tvNombre.text = nombre.uppercase()
+
+        val colores = listOf(
+            R.color.bimestre_1,
+            R.color.bimestre_2,
+            R.color.bimestre_3,
+            R.color.bimestre_4
+        )
+
+        val colorResId = colores[position % colores.size]
+        val context = holder.itemView.context
+        holder.cardView.setCardBackgroundColor(context.getColor(colorResId))
+
         holder.cardView.setOnClickListener {
             onBimestreClick(id, nombre)
         }
     }
+
 
     override fun getItemCount(): Int = bimestres.size
 

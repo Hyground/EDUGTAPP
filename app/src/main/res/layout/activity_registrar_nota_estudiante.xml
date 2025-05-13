@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:elevation="4dp"
         app:cardCornerRadius="12dp"
-        app:cardBackgroundColor="#91FF85">
+        app:cardBackgroundColor="#7CBFF2">
 
         <LinearLayout
             android:orientation="vertical"
@@ -67,7 +67,10 @@
         android:layout_weight="1"
         android:paddingBottom="8dp"
         android:visibility="gone"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        app:cardBackgroundColor="#EDDE6B"
+        />
+
 
     <!-- Sumas Totales -->
     <TextView
