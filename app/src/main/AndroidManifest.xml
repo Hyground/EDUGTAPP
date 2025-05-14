@@ -44,6 +44,8 @@
         <activity android:name=".ui.RegistrarNotasActivity" />
         <activity android:name=".ui.CambiarFotoActivity" />
         <activity android:name=".ui.RegistrarNotaDesdeEstudianteActivity" />
+        <activity android:name=".ui.RecuperarActivity" />
+
         <activity
             android:name=".ui.RegistrarNotaDesdeActividadActivity"
             android:windowSoftInputMode="adjustResize" />

@@ -3,12 +3,13 @@ package com.example.edugtapp
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.network.LoginService
 import com.example.edugtapp.ui.MenuActivity
+import com.example.edugtapp.ui.RecuperarActivity
 import org.json.JSONObject
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,8 +34,9 @@ class MainActivity : AppCompatActivity() {
         loginButton.setOnClickListener { iniciarSesion() }
 
         forgotPasswordText.setOnClickListener {
-            Toast.makeText(this, "Función aún no disponible", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, RecuperarActivity::class.java))
         }
+
     }
 
     private fun inicializarVistas() {
