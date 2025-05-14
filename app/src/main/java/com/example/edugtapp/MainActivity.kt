@@ -3,14 +3,13 @@ package com.example.edugtapp
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.edugtapp.network.LoginService
 import com.example.edugtapp.ui.MenuActivity
-import com.example.edugtapp.ui.RecuperarActivity
 import org.json.JSONObject
-
-
+import com.example.edugtapp.ui.RecuperarActivity
 class MainActivity : AppCompatActivity() {
 
     private lateinit var usernameEditText: EditText
@@ -18,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var loginButton: Button
     private lateinit var rememberCheckBox: CheckBox
     private lateinit var forgotPasswordText: TextView
+    private lateinit var loginErrorText: TextView
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var sharedPrefs: SharedPreferences
     private val loginService = LoginService()
@@ -36,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         forgotPasswordText.setOnClickListener {
             startActivity(Intent(this, RecuperarActivity::class.java))
         }
-
     }
 
     private fun inicializarVistas() {
@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
         loginButton = findViewById(R.id.loginButton)
         rememberCheckBox = findViewById(R.id.rememberCheckBox)
         forgotPasswordText = findViewById(R.id.forgotPasswordText)
+        loginErrorText = findViewById(R.id.loginErrorText)
+        progressBar = findViewById(R.id.progressBar)
     }
 
     private fun cargarUsuarioGuardado() {
@@ -61,11 +63,14 @@ class MainActivity : AppCompatActivity() {
         val contrasenia = passwordEditText.text.toString().trim()
 
         if (usuario.isEmpty() || contrasenia.isEmpty()) {
-            Toast.makeText(this, "Ingrese usuario y contraseña", Toast.LENGTH_SHORT).show()
+            loginErrorText.text = "Ingrese usuario y contraseña"
+            loginErrorText.visibility = View.VISIBLE
             return
         }
 
         loginButton.isEnabled = false
+        progressBar.visibility = View.VISIBLE
+        loginErrorText.visibility = View.GONE
 
         loginService.login(
             usuario, contrasenia,
@@ -77,6 +82,8 @@ class MainActivity : AppCompatActivity() {
     private fun procesarRespuesta(respuesta: String, usuario: String, clave: String) {
         runOnUiThread {
             loginButton.isEnabled = true
+            progressBar.visibility = View.GONE
+
             try {
                 val json = JSONObject(respuesta)
                 val nombreCompleto = json.optString("nombreCompleto")
@@ -105,10 +112,12 @@ class MainActivity : AppCompatActivity() {
                     })
                     finish()
                 } else {
-                    Toast.makeText(this, "Respuesta inválida del servidor", Toast.LENGTH_SHORT).show()
+                    loginErrorText.text = "Respuesta inválida del servidor"
+                    loginErrorText.visibility = View.VISIBLE
                 }
             } catch (_: Exception) {
-                Toast.makeText(this, "Error procesando la respuesta", Toast.LENGTH_SHORT).show()
+                loginErrorText.text = "Error procesando la respuesta"
+                loginErrorText.visibility = View.VISIBLE
             }
         }
     }
@@ -116,12 +125,14 @@ class MainActivity : AppCompatActivity() {
     private fun mostrarError(error: String) {
         runOnUiThread {
             loginButton.isEnabled = true
-            val mensaje = if ("401" in error) {
+            progressBar.visibility = View.GONE
+
+            loginErrorText.text = if ("401" in error) {
                 "Usuario o contraseña incorrectos"
             } else {
                 error
             }
-            Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+            loginErrorText.visibility = View.VISIBLE
         }
     }
 }
