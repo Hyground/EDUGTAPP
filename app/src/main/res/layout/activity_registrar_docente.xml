@@ -117,33 +117,60 @@
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
-        <!-- Botón Google -->
+        <!-- Botón principal de registro -->
         <Button
-            android:id="@+id/btnGoogle"
+            android:id="@+id/btnRegistrarDocente"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Registrarse con Google"
+            android:layout_height="wrap_content"
+            android:text="Registrarse ahora"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            android:drawableStart="@drawable/ic_google"
-            android:drawablePadding="12dp"
-            android:backgroundTint="#DB4437"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Botón Facebook -->
-        <Button
-            android:id="@+id/btnFacebook"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Registrarse con Facebook"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:drawableStart="@drawable/ic_facebook"
-            android:drawablePadding="12dp"
-            android:backgroundTint="#4267B2"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:backgroundTint="#002462"
             android:layout_marginBottom="16dp" />
 
-        <!-- Error -->
+        <!-- Texto de separación -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="O continuar con"
+            android:textColor="#999999"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Íconos sociales redondos -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <ImageButton
+                android:id="@+id/btnFacebook"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/fb"
+                android:background="@drawable/circle_white_border"
+                android:contentDescription="Facebook"
+                android:layout_marginEnd="16dp"
+                android:scaleType="centerInside"
+                android:padding="8dp" />
+
+            <ImageButton
+                android:id="@+id/btnGoogle"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/google"
+                android:background="@drawable/circle_white_border"
+                android:contentDescription="Google"
+                android:scaleType="centerInside"
+                android:padding="8dp" />
+        </LinearLayout>
+
+        <!-- ERROR -->
         <TextView
             android:id="@+id/tvErrorRegistro"
             android:layout_width="match_parent"
@@ -153,23 +180,12 @@
             android:visibility="gone"
             android:layout_marginBottom="8dp" />
 
-        <!-- Progress -->
+        <!-- PROGRESS BAR -->
         <ProgressBar
             android:id="@+id/progressBarRegistro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_marginBottom="16dp" />
-
-        <!-- Registrar -->
-        <Button
-            android:id="@+id/btnRegistrarDocente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Registrarse"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:minHeight="48dp"
-            android:padding="12dp" />
     </LinearLayout>
 </ScrollView>

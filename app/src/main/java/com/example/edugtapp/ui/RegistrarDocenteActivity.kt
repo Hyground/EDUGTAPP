@@ -25,8 +25,8 @@ class RegistrarDocenteActivity : AppCompatActivity() {
     private lateinit var spinnerGrado: Spinner
     private lateinit var spinnerSeccion: Spinner
     private lateinit var btnRegistrar: Button
-    private lateinit var btnGoogle: Button
-    private lateinit var btnFacebook: Button
+    private lateinit var btnGoogle: ImageButton
+    private lateinit var btnFacebook: ImageButton
     private lateinit var progressBar: ProgressBar
     private lateinit var tvError: TextView
 
@@ -37,7 +37,7 @@ class RegistrarDocenteActivity : AppCompatActivity() {
 
     private val debounceHandler = Handler()
     private var debounceRunnable: Runnable? = null
-    private val delayMs = 900L // tiempo de espera antes de hacer la consulta
+    private val delayMs = 900L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
