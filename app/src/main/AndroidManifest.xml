@@ -45,6 +45,7 @@
         <activity android:name=".ui.CambiarFotoActivity" />
         <activity android:name=".ui.RegistrarNotaDesdeEstudianteActivity" />
         <activity android:name=".ui.RecuperarActivity" />
+        <activity android:name=".ui.RegistrarDocenteActivity" />
 
         <activity
             android:name=".ui.RegistrarNotaDesdeActividadActivity"

@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         forgotPasswordText.setOnClickListener {
             startActivity(Intent(this, RecuperarActivity::class.java))
         }
+        findViewById<TextView>(R.id.registerText).setOnClickListener {
+            startActivity(Intent(this, com.example.edugtapp.ui.RegistrarDocenteActivity::class.java))
+        }
+
     }
 
     private fun inicializarVistas() {

@@ -17,4 +17,12 @@
     <string name="curso_formato">Curso: %1$s</string>
     <string name="bimestre_formato">Bimestre: %1$s</string>
     <string name="resumen_notas_formato">Total notas: %1$d de %2$d</string>
+    <string name="titulo_registro">Registro de Docente</string>
+    <string name="hint_nombre">Nombre completo</string>
+    <string name="hint_usuario">Nombre de usuario</string>
+    <string name="hint_contrasenia">Contraseña</string>
+    <string name="hint_grado">Grado</string>
+    <string name="hint_seccion">Sección</string>
+    <string name="btn_registrarse">Registrarse</string>
+
 </resources>
