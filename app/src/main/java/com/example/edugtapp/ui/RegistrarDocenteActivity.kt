@@ -62,7 +62,6 @@ class RegistrarDocenteActivity : AppCompatActivity() {
         etUsuario.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val usuario = s.toString().trim()
-
                 debounceRunnable?.let { debounceHandler.removeCallbacks(it) }
 
                 debounceRunnable = Runnable {
@@ -108,6 +107,12 @@ class RegistrarDocenteActivity : AppCompatActivity() {
             if (nombre.isEmpty() || cui.isEmpty() || usuario.isEmpty() || clave.isEmpty()
                 || gradoSeleccionado == null || seccionSeleccionada == null) {
                 tvError.text = "Todos los campos obligatorios deben estar llenos"
+                tvError.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+
+            if (gradoSeleccionado!!.id == 0 || seccionSeleccionada!!.id == 0) {
+                tvError.text = "Debes seleccionar un grado y una sección válidos"
                 tvError.visibility = View.VISIBLE
                 return@setOnClickListener
             }
@@ -170,7 +175,11 @@ class RegistrarDocenteActivity : AppCompatActivity() {
         CatalogoService.obtenerGrados(
             onSuccess = { grados ->
                 runOnUiThread {
-                    spinnerGrado.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, grados)
+                    val opcionesConDefault = mutableListOf(OpcionCatalogo(0, "Grado"))
+                    opcionesConDefault.addAll(grados)
+                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, opcionesConDefault)
+                    spinnerGrado.adapter = adapter
+                    spinnerGrado.setSelection(0)
                 }
             },
             onError = { mostrarError(it) }
@@ -181,7 +190,11 @@ class RegistrarDocenteActivity : AppCompatActivity() {
         CatalogoService.obtenerSecciones(
             onSuccess = { secciones ->
                 runOnUiThread {
-                    spinnerSeccion.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, secciones)
+                    val opcionesConDefault = mutableListOf(OpcionCatalogo(0, "Sección"))
+                    opcionesConDefault.addAll(secciones)
+                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, opcionesConDefault)
+                    spinnerSeccion.adapter = adapter
+                    spinnerSeccion.setSelection(0)
                 }
             },
             onError = { mostrarError(it) }
