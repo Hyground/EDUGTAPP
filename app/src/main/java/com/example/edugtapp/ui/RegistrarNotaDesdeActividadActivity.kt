@@ -29,8 +29,8 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
     private lateinit var docenteInfo: DocenteInfo
 
     private val estudiantes = mutableListOf<Estudiante>()
-    private val calificaciones = mutableMapOf<String, Double>() // CUI -> Nota
-    private val notasExistentes = mutableMapOf<String, Double>() // para mantener la referencia
+    private val calificaciones = mutableMapOf<String, Double>()
+    private val notasExistentes = mutableMapOf<String, Double>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +60,6 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
             return
         }
 
-        // Mostrar datos
         tvNombreActividad.text = "Actividad: $nombreActividad"
         tvPonderacion.text = "Ponderación: ${ponderacion.toInt()}"
         tvCurso.text = "Curso: $nombreCurso"
@@ -69,7 +68,7 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
         cargarEstudiantesYNotas()
 
         btnGuardarNotas.setOnClickListener {
-            guardarNotas()
+            guardarNotas(ponderacion)
         }
     }
 
@@ -121,16 +120,23 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
 
                             holder.tvNombreEstudiante.text = "${estudiante.nombre} ${estudiante.apellido}"
 
-                            // Remover listeners antiguos para evitar duplicados
+                            // Limpiar listeners antiguos
                             holder.edtNotaEstudiante.setOnFocusChangeListener(null)
 
-                            // Mostrar nota si existe
+                            // Mostrar nota existente
                             val notaExistente = calificaciones[cui] ?: notasExistentes[cui]
                             holder.edtNotaEstudiante.setText(notaExistente?.toString() ?: "")
 
-                            // Guardar valor al perder el foco
-                            holder.edtNotaEstudiante.setOnFocusChangeListener { _, hasFocus ->
-                                if (!hasFocus) {
+                            // Listener de foco
+                            holder.edtNotaEstudiante.setOnFocusChangeListener { view, hasFocus ->
+                                if (hasFocus) {
+                                    (view as EditText).post {
+                                        view.selectAll()
+                                        view.requestRectangleOnScreen(
+                                            android.graphics.Rect(0, 0, view.width, view.height), true
+                                        )
+                                    }
+                                } else {
                                     val nota = holder.edtNotaEstudiante.text.toString().toDoubleOrNull()
                                     if (nota != null) {
                                         calificaciones[cui] = nota
@@ -148,7 +154,9 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
         }
     }
 
-    private fun guardarNotas() {
+    private fun guardarNotas(ponderacionMaxima: Double) {
+        currentFocus?.clearFocus()
+
         if (calificaciones.isEmpty()) {
             Toast.makeText(this, "No se ingresaron notas", Toast.LENGTH_SHORT).show()
             return
@@ -156,6 +164,10 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
 
         val jsonArray = JSONArray()
         for ((cui, nota) in calificaciones) {
+            if (nota > ponderacionMaxima) {
+                Toast.makeText(this, "La nota de $cui excede la ponderación máxima ($ponderacionMaxima)", Toast.LENGTH_LONG).show()
+                return
+            }
             val json = JSONObject().apply {
                 put("cui", cui)
                 put("actividadId", idActividad)
@@ -175,6 +187,7 @@ class RegistrarNotaDesdeActividadActivity : AppCompatActivity() {
             }
         }
     }
+
 
     data class ViewHolder(
         val tvNombreEstudiante: TextView,
