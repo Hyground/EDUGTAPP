@@ -1,73 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="@android:color/white">
+    android:background="#B4D9E9"
+    android:padding="24dp">
 
     <TextView
         android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:text="Cambiar Foto de Perfil"
+        android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#000000"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imagePreview"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/ic_user_placeholder"
-        android:scaleType="centerCrop"
+        android:layout_marginTop="12dp"
         android:background="@drawable/avatar_circle_bg"
         android:contentDescription="Vista previa de imagen"
-        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
-        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_user_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo" />
 
     <Button
         android:id="@+id/btnSeleccionarGaleria"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Elegir desde Galería"
-        app:layout_constraintTop_toBottomOf="@id/imagePreview"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"
         android:backgroundTint="#3F51B5"
-        android:textColor="@android:color/white" />
+        android:text="Elegir desde Galería"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imagePreview" />
 
     <Button
         android:id="@+id/btnTomarFoto"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Tomar Foto"
-        app:layout_constraintTop_toBottomOf="@id/btnSeleccionarGaleria"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"
         android:backgroundTint="#3F51B5"
-        android:textColor="@android:color/white" />
+        android:text="Tomar Foto"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSeleccionarGaleria" />
 
     <Button
         android:id="@+id/btnSubirFoto"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Subir Foto"
-        app:layout_constraintTop_toBottomOf="@id/btnTomarFoto"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"
         android:backgroundTint="#4CAF50"
-        android:textColor="@android:color/white" />
+        android:text="Subir Foto"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnTomarFoto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

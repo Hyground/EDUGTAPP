@@ -1,54 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="#C5D3DB">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#FFC107"
-        app:contentInsetStartWithNavigation="0dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
 
-        <TextView
-            android:id="@+id/toolbarTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:text="Registrar Actividades"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-    </androidx.appcompat.widget.Toolbar>
-
-    <!-- Contenedor para el include con posición -->
+    <!-- Formulario inferior -->
     <LinearLayout
         android:id="@+id/contenedorFiltro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+        android:divider="@drawable/bg_estudiante_card_selected"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:background="#165678"
+            app:srcCompat="@drawable/logopngsinletras" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
+            android:background="#165678"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textAlignment="center"
+            app:contentInsetStart="24dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:titleMargin="8dp"
+            app:titleTextColor="#27326D">
+
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text="      REGISTRAR ACTIVIDADES"
+                android:textColor="@color/white"
+                android:textDirection="locale"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
         <include layout="@layout/layout_filtro_bimestre_curso" />
+
     </LinearLayout>
 
-    <!-- Lista de actividades -->
     <ListView
         android:id="@+id/listActividades"
-        android:layout_below="@id/contenedorFiltro"
-        android:layout_above="@id/formularioActividad"
+        style="@android:style/Widget.Holo.ListView.DropDown"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="12dp"
-        android:padding="12dp" />
+        android:layout_above="@id/formularioActividad"
+        android:layout_below="@id/contenedorFiltro"
+        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="-729dp"
+        android:backgroundTint="#622F2F"
+        android:divider="@color/white"
+        android:dividerHeight="0dp"
+        android:headerDividersEnabled="true"
+        android:padding="12dp"
+        android:textAlignment="center" />
 
-    <!-- Formulario inferior -->
     <LinearLayout
         android:id="@+id/formularioActividad"
         android:layout_width="match_parent"
@@ -65,11 +84,12 @@
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
         android:contentDescription="Agregar"
+        app:backgroundTint="#1565C0"
         app:srcCompat="@drawable/ic_add"
-        app:tint="@android:color/white"
-        app:backgroundTint="@android:color/holo_red_dark" />
+        app:tint="@android:color/white" />
+
 </RelativeLayout>

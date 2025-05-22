@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:padding="24dp">
 
         <!-- Imagen de perfil -->
@@ -19,9 +19,9 @@
             android:id="@+id/imgEditIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_edit"
+            android:layout_marginBottom="16dp"
             android:contentDescription="Editar foto"
-            android:layout_marginBottom="16dp" />
+            android:src="@drawable/ic_edit" />
 
         <!-- Nombre del docente -->
 
@@ -35,29 +35,29 @@
             android:id="@+id/tvNombreDocente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:text="Nombre del Docente"
-            android:textSize="18sp"
-            android:textStyle="bold"
             android:textColor="#0D1B6B"
-            android:layout_marginBottom="4dp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <!-- Grado y Sección -->
         <TextView
             android:id="@+id/tvGradoSeccion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:text="Grado - Sección"
-            android:textColor="#555555"
-            android:layout_marginBottom="4dp" />
+            android:textColor="#555555" />
 
         <!-- Cantidad de estudiantes -->
         <TextView
             android:id="@+id/tvCantidadEstudiantes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:text="Estudiantes: 0"
-            android:textColor="#777777"
-            android:layout_marginBottom="24dp" />
+            android:textColor="#777777" />
 
         <!-- Botón: Registrar alumnos -->
 
@@ -71,10 +71,10 @@
             android:id="@+id/btnRegistrarAlumnos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registrar Alumnos"
-            android:textColor="#FFFFFF"
+            android:layout_marginBottom="12dp"
             android:backgroundTint="#0D1B6B"
-            android:layout_marginBottom="12dp" />
+            android:text="Registrar Alumnos"
+            android:textColor="#FFFFFF" />
 
         <!-- Botón: Crear actividades -->
         <ImageView
@@ -87,10 +87,10 @@
             android:id="@+id/btnCrearActividades"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Crear Actividades"
-            android:textColor="#FFFFFF"
+            android:layout_marginBottom="12dp"
             android:backgroundTint="#0D1B6B"
-            android:layout_marginBottom="12dp" />
+            android:text="Crear Actividades"
+            android:textColor="#FFFFFF" />
 
         <!-- Botón: Registrar notas -->
 
@@ -104,19 +104,19 @@
             android:id="@+id/btnRegistrarNotas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registrar Notas"
-            android:textColor="#FFFFFF"
+            android:layout_marginBottom="12dp"
             android:backgroundTint="#0D1B6B"
-            android:layout_marginBottom="12dp" />
+            android:text="Registrar Notas"
+            android:textColor="#FFFFFF" />
 
         <!-- Botón: Cerrar sesión -->
         <Button
             android:id="@+id/btnCerrarSesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#579FCA"
             android:text="Cerrar Sesión"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#EA5B48" />
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 </ScrollView>
