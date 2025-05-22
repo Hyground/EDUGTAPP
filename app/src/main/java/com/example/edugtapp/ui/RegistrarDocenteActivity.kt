@@ -1,6 +1,7 @@
 package com.example.edugtapp.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +15,12 @@ import com.example.edugtapp.R
 import com.example.edugtapp.network.CatalogoService
 import com.example.edugtapp.network.CatalogoService.OpcionCatalogo
 import com.example.edugtapp.network.RegistroService
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import android.util.Log
 
 class RegistrarDocenteActivity : AppCompatActivity() {
 
@@ -30,6 +37,9 @@ class RegistrarDocenteActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var tvError: TextView
 
+    private var googleToken: String? = null
+    private lateinit var googleSignInClient: GoogleSignInClient
+
     private var gradoSeleccionado: OpcionCatalogo? = null
     private var seccionSeleccionada: OpcionCatalogo? = null
     private var usuarioDisponible: Boolean = false
@@ -38,6 +48,8 @@ class RegistrarDocenteActivity : AppCompatActivity() {
     private val debounceHandler = Handler()
     private var debounceRunnable: Runnable? = null
     private val delayMs = 900L
+
+    private val RC_GOOGLE_SIGN_IN = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,45 +68,19 @@ class RegistrarDocenteActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBarRegistro)
         tvError = findViewById(R.id.tvErrorRegistro)
 
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken("676691381314-t5omu4iaif04hje0sqeafr3ghsesbuna.apps.googleusercontent.com")
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
         cargarGrados()
         cargarSecciones()
+        configurarVerificacionUsuario()
+        configurarBotones()
+    }
 
-        etUsuario.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val usuario = s.toString().trim()
-                debounceRunnable?.let { debounceHandler.removeCallbacks(it) }
-
-                debounceRunnable = Runnable {
-                    if (usuario.isNotEmpty() && usuario != ultimaConsulta) {
-                        ultimaConsulta = usuario
-                        RegistroService.verificarNombreUsuario(
-                            nombreUsuario = usuario,
-                            onResult = { disponible ->
-                                usuarioDisponible = disponible
-                                runOnUiThread {
-                                    actualizarIconoUsuario(disponible)
-                                }
-                            },
-                            onError = {
-                                usuarioDisponible = false
-                                runOnUiThread {
-                                    actualizarIconoUsuario(null)
-                                }
-                            }
-                        )
-                    } else {
-                        usuarioDisponible = false
-                        actualizarIconoUsuario(null)
-                    }
-                }
-
-                debounceHandler.postDelayed(debounceRunnable!!, delayMs)
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-
+    private fun configurarBotones() {
         btnRegistrar.setOnClickListener {
             val nombre = etNombre.text.toString().trim()
             val cui = etCui.text.toString().trim()
@@ -135,6 +121,7 @@ class RegistrarDocenteActivity : AppCompatActivity() {
                 clave = clave,
                 gradoId = gradoSeleccionado!!.id,
                 seccionId = seccionSeleccionada!!.id,
+                googleToken = googleToken,
                 onSuccess = {
                     runOnUiThread {
                         Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
@@ -154,12 +141,70 @@ class RegistrarDocenteActivity : AppCompatActivity() {
         }
 
         btnGoogle.setOnClickListener {
-            Toast.makeText(this, "Registro con Google en desarrollo", Toast.LENGTH_SHORT).show()
+            val intent = googleSignInClient.signInIntent
+            startActivityForResult(intent, RC_GOOGLE_SIGN_IN)
         }
 
         btnFacebook.setOnClickListener {
             Toast.makeText(this, "Registro con Facebook en desarrollo", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
+                etCorreo.setText(account.email ?: "")
+                etNombre.setText(account.displayName ?: "")
+                googleToken = account.idToken
+                Log.d("GOOGLE_SIGN_IN", "Token recibido: $googleToken")
+                Toast.makeText(this, "Google conectado con éxito", Toast.LENGTH_SHORT).show()
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Error al iniciar sesión con Google", Toast.LENGTH_SHORT).show()
+                Log.e("GOOGLE_SIGN_IN", "Error: ${e.statusCode}", e)
+            }
+        }
+    }
+
+    private fun configurarVerificacionUsuario() {
+        etUsuario.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val usuario = s.toString().trim()
+                debounceRunnable?.let { debounceHandler.removeCallbacks(it) }
+
+                debounceRunnable = Runnable {
+                    if (usuario.isNotEmpty() && usuario != ultimaConsulta) {
+                        ultimaConsulta = usuario
+                        RegistroService.verificarNombreUsuario(
+                            nombreUsuario = usuario,
+                            onResult = { disponible ->
+                                usuarioDisponible = disponible
+                                runOnUiThread {
+                                    actualizarIconoUsuario(disponible)
+                                }
+                            },
+                            onError = {
+                                usuarioDisponible = false
+                                runOnUiThread {
+                                    actualizarIconoUsuario(null)
+                                }
+                            }
+                        )
+                    } else {
+                        usuarioDisponible = false
+                        actualizarIconoUsuario(null)
+                    }
+                }
+
+                debounceHandler.postDelayed(debounceRunnable!!, delayMs)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     private fun actualizarIconoUsuario(disponible: Boolean?) {

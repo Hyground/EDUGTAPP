@@ -18,6 +18,7 @@ object RegistroService {
         clave: String,
         gradoId: Int,
         seccionId: Int,
+        googleToken: String? = null, // ← soporte para login con Google
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
@@ -29,6 +30,7 @@ object RegistroService {
             put("gradoId", gradoId)
             put("seccionId", seccionId)
             correo?.let { put("correo", it) }
+            googleToken?.let { put("googleToken", it) } // ← se agrega solo si existe
         }
 
         val body = json.toString().toRequestBody("application/json".toMediaType())
@@ -54,6 +56,7 @@ object RegistroService {
             }
         })
     }
+
     fun verificarNombreUsuario(
         nombreUsuario: String,
         onResult: (disponible: Boolean) -> Unit,
@@ -81,5 +84,4 @@ object RegistroService {
             }
         })
     }
-
 }

@@ -26,7 +26,7 @@
         android:theme="@style/Theme.EDUGTAPP"
         tools:targetApi="31">
 
-        <!-- Actividad de inicio (ajuste agregado aquí) -->
+        <!-- Actividad de inicio -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Otras pantallas -->
+        <!-- Actividades propias -->
         <activity android:name=".ui.MenuActivity" android:exported="false" />
         <activity android:name=".ui.RegistrarAlumnoActivity" />
         <activity android:name=".ui.RegistrarActividadActivity" />
@@ -46,12 +46,17 @@
         <activity android:name=".ui.RegistrarNotaDesdeEstudianteActivity" />
         <activity android:name=".ui.RecuperarActivity" />
         <activity android:name=".ui.RegistrarDocenteActivity" />
-
         <activity
             android:name=".ui.RegistrarNotaDesdeActividadActivity"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- FileProvider (debe coincidir con tu file_paths.xml) -->
+        <!-- Actividad interna de Google Sign-In -->
+        <activity
+            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+            android:excludeFromRecents="true"
+            android:exported="false" />
+
+        <!-- FileProvider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

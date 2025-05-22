@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt") // Necesario para usar Glide con anotaciones
+    id("kotlin-kapt") // Glide
 }
 
 android {
@@ -47,17 +47,20 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
+    // Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
     // Red
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    // Glide para imágenes desde Cloudinary u otros
+    // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
 
-    // CardView para tarjetas y encabezado con esquinas redondeadas
+    // CardView
     implementation("androidx.cardview:cardview:1.0.0")
 
-    // Test
+    // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
