@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C5D3DB">
+    android:background="#DAE4E9">
 
 
     <!-- Formulario inferior -->
@@ -12,6 +12,7 @@
         android:id="@+id/contenedorFiltro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#DAE4E9"
         android:divider="@drawable/bg_estudiante_card_selected"
         android:orientation="vertical">
 
