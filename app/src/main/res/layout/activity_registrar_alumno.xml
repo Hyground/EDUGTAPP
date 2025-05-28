@@ -1,39 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="#E1EBF4">
 
-    <!-- Encabezado con grado y sección -->
+    <!-- Encabezado con título, grado y sección -->
     <LinearLayout
         android:id="@+id/headerInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:background="#FFC107"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:background="#165678"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="195dp"
+            android:layout_height="44dp"
+            app:srcCompat="@drawable/logopngsinletras" />
+
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Registrar alumnos"
+            android:textColor="@android:color/white"
+            android:textSize="34sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvGrado"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginBottom="4dp"
             android:text="Grado:"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvSeccion"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Sección:"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- Lista de estudiantes -->
@@ -48,7 +63,7 @@
         android:clipToPadding="false"
         android:paddingBottom="100dp" />
 
-    <!-- Formulario inferior (inicialmente oculto) -->
+    <!-- Formulario inferior (debe existir el layout) -->
     <LinearLayout
         android:id="@+id/formulario"
         android:layout_width="match_parent"
@@ -72,6 +87,6 @@
         android:layout_margin="20dp"
         android:contentDescription="Agregar estudiante"
         app:srcCompat="@drawable/ic_add"
-        app:backgroundTint="#F80000"
+        app:backgroundTint="#0D5DAF"
         android:elevation="6dp" />
 </RelativeLayout>
