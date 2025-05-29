@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
     android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
-    android:background="@drawable/bg_estudiante_card"
-    android:gravity="center_vertical">
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/edittext_default"
+    android:backgroundTint="#C3E5EF"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
 
     <!-- Nombre del estudiante -->
     <TextView
         android:id="@+id/tvNombreEstudiante"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="NOMBRE DEL ESTUDIANTE"
+        android:textColor="#2B3856"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#212121" />
+        android:textStyle="bold" />
 
     <!-- Botón Calificar -->
     <Button
         android:id="@+id/btnCalificar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:backgroundTint="#439BA0"
         android:text="Calificar"
         android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#43A047"
-        android:layout_marginStart="12dp"/>
+        android:textColor="@android:color/white" />
 </LinearLayout>

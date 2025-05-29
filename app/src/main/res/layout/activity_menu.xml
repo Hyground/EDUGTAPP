@@ -27,7 +27,7 @@
 
         <ImageView
             android:id="@+id/imgAvatarDocente"
-            android:layout_width="109dp"
+            android:layout_width="132dp"
             android:layout_height="137dp"
             app:srcCompat="@drawable/perfil" />
 
@@ -38,7 +38,7 @@
             android:layout_marginBottom="4dp"
             android:text="Nombre del Docente"
             android:textColor="#0D1B6B"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <!-- Grado y Sección -->
@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:text="Grado - Sección"
-            android:textColor="#555555" />
+            android:textColor="#555555"
+            android:textSize="20sp" />
 
         <!-- Cantidad de estudiantes -->
         <TextView
@@ -57,66 +58,72 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="Estudiantes: 0"
-            android:textColor="#777777" />
+            android:textColor="#777777"
+            android:textSize="20sp" />
 
         <!-- Botón: Registrar alumnos -->
 
+        <!-- Botón: Crear actividades -->
+
         <ImageView
             android:id="@+id/imageView5"
-            android:layout_width="59dp"
-            android:layout_height="58dp"
+            android:layout_width="53dp"
+            android:layout_height="62dp"
             app:srcCompat="@drawable/reg_alumnos" />
 
         <Button
             android:id="@+id/btnRegistrarAlumnos"
-            android:layout_width="match_parent"
+            android:layout_width="316dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:backgroundTint="#0D1B6B"
             android:text="Registrar Alumnos"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
-        <!-- Botón: Crear actividades -->
         <ImageView
             android:id="@+id/reg_actividades"
-            android:layout_width="56dp"
-            android:layout_height="53dp"
+            android:layout_width="54dp"
+            android:layout_height="61dp"
             app:srcCompat="@drawable/reg_actividades" />
 
         <Button
             android:id="@+id/btnCrearActividades"
-            android:layout_width="match_parent"
+            android:layout_width="326dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:backgroundTint="#0D1B6B"
             android:text="Crear Actividades"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
         <!-- Botón: Registrar notas -->
 
         <ImageView
             android:id="@+id/imageView7"
-            android:layout_width="52dp"
-            android:layout_height="56dp"
+            android:layout_width="44dp"
+            android:layout_height="39dp"
             app:srcCompat="@drawable/img_2" />
 
         <Button
             android:id="@+id/btnRegistrarNotas"
-            android:layout_width="match_parent"
+            android:layout_width="329dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:backgroundTint="#0D1B6B"
             android:text="Registrar Notas"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
         <!-- Botón: Cerrar sesión -->
         <Button
             android:id="@+id/btnCerrarSesion"
-            android:layout_width="match_parent"
+            android:layout_width="169dp"
             android:layout_height="wrap_content"
             android:backgroundTint="#579FCA"
             android:text="Cerrar Sesión"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
     </LinearLayout>
 </ScrollView>
