@@ -17,43 +17,44 @@
         app:cardBackgroundColor="#BBDEFB">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#165678"
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/tvNombreActividad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Actividad: "
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#000000" />
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvPonderacion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ponderación: "
-                android:textSize="16sp"
-                android:textColor="#000000" />
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvCurso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Curso: "
-                android:textSize="16sp"
-                android:textColor="#000000" />
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvBimestre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bimestre: "
-                android:textSize="16sp"
-                android:textColor="#000000" />
+                android:textColor="#FBFBFB"
+                android:textSize="16sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -72,10 +73,10 @@
         android:id="@+id/btnGuardarNotasActividad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Guardar Notas"
         android:layout_marginTop="12dp"
-        android:backgroundTint="#4CAF50"
+        android:backgroundTint="#33789B"
+        android:elevation="2dp"
+        android:text="Guardar Notas"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:elevation="2dp"/>
+        android:textStyle="bold" />
 </LinearLayout>

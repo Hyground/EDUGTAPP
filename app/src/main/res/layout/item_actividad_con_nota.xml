@@ -3,28 +3,30 @@
     android:id="@+id/layoutActividad"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="12dp"
     android:layout_margin="8dp"
-    android:background="@drawable/bg_estudiante_card"
+    android:background="@drawable/bg_estudiante_card_selected"
+    android:backgroundTint="#C6E5F0"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="12dp">
 
     <TextView
         android:id="@+id/tvNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Nombre de la actividad"
-        android:textStyle="bold"
+        android:textColor="#000000"
         android:textSize="16sp"
-        android:textColor="#000000" />
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/tvNota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Nota obtenida: 80"
-        android:textSize="14sp"
         android:textColor="#000000"
+        android:textSize="14sp"
         android:visibility="gone" />
 
     <TextView
@@ -32,17 +34,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tipo: Evaluación"
-        android:textSize="14sp"
-        android:textColor="#555555" />
+        android:textColor="#555555"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvPonderacion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ponderación: 25"
-        android:textSize="14sp"
-        android:textColor="#555555" />
-
+        android:textColor="#555555"
+        android:textSize="14sp" />
 
 
 </LinearLayout>
