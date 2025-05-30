@@ -7,82 +7,82 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp"
-        android:background="#E0F7FA"
         android:layout_marginHorizontal="12dp"
-        android:elevation="2dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:background="#D6E6F2"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/tvNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nombre de la actividad"
-            android:textStyle="bold"
+            android:textColor="#000000"
             android:textSize="16sp"
-            android:textColor="#000000" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvTipo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tipo: Actividad"
-            android:textSize="14sp"
-            android:textColor="#555555" />
+            android:textColor="#555555"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvPonderacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ponderación: 10.0"
-            android:textSize="14sp"
-            android:textColor="#555555" />
+            android:textColor="#555555"
+            android:textSize="14sp" />
 
         <!-- Botones -->
         <LinearLayout
             android:id="@+id/opcionesLayoutActividad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="8dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnCalificarActividad"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Calificar"
-                android:textColor="@android:color/white"
+                android:layout_weight="1"
                 android:backgroundTint="#0288D1"
                 android:focusable="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true"
+                android:text="Calificar"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/btnActualizarActividad"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Actualizar"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#4CAF50"
                 android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="#4CAF50"
                 android:focusable="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true"
+                android:text="Actualizar"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/btnEliminarActividad"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Eliminar"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#D32F2F"
                 android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="#D32F2F"
                 android:focusable="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true"
+                android:text="Eliminar"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </LinearLayout>
 
