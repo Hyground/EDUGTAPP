@@ -3,88 +3,95 @@
     android:id="@+id/formularioInterno"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#F9F9F9"
+    android:background="@color/white"
+    android:backgroundTint="#CCDBED"
     android:elevation="6dp"
+    android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- CUI -->
     <EditText
         android:id="@+id/edtCui"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingVertical="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/edittext_borde_azul"
         android:hint="CUI del estudiante"
-        android:textColor="#000000"
-        android:textColorHint="#888888"
         android:inputType="number"
-        android:backgroundTint="#1565C0" />
+        android:minHeight="48dp"
+        android:paddingHorizontal="12dp"
+        android:textColor="#000000"
+        android:textColorHint="#888888" />
 
+    <!-- Código -->
     <EditText
         android:id="@+id/edtCodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingVertical="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/edittext_borde_azul"
         android:hint="Código personal"
-        android:textColor="#000000"
-        android:textColorHint="#888888"
         android:inputType="text"
-        android:backgroundTint="#1565C0" />
+        android:minHeight="48dp"
+        android:paddingHorizontal="12dp"
+        android:textColor="#000000"
+        android:textColorHint="#888888" />
 
+    <!-- Nombre -->
     <EditText
         android:id="@+id/edtNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingVertical="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/edittext_borde_azul"
         android:hint="Nombre del estudiante"
-        android:textColor="#000000"
-        android:textColorHint="#888888"
         android:inputType="textPersonName"
-        android:backgroundTint="#1565C0" />
+        android:minHeight="48dp"
+        android:paddingHorizontal="12dp"
+        android:textColor="#000000"
+        android:textColorHint="#888888" />
 
+    <!-- Apellido -->
     <EditText
         android:id="@+id/edtApellido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingVertical="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_borde_azul"
         android:hint="Apellido del estudiante"
-        android:textColor="#000000"
-        android:textColorHint="#888888"
         android:inputType="textPersonName"
-        android:backgroundTint="#1565C0" />
+        android:minHeight="48dp"
+        android:paddingHorizontal="12dp"
+        android:textColor="#000000"
+        android:textColorHint="#888888" />
 
     <!-- Botones -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginTop="12dp"
-        android:gravity="center_horizontal">
+        android:weightSum="2">
 
         <Button
             android:id="@+id/btnGuardar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:minHeight="48dp"
+            android:backgroundTint="#1E3B8A"
             android:text="Guardar"
-            android:textColor="@android:color/white"
             android:textAllCaps="false"
-            android:backgroundTint="#43A047" />
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/btnCancelar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:minHeight="48dp"
+            android:backgroundTint="#948E8E"
             android:text="Cancelar"
-            android:textColor="@android:color/white"
             android:textAllCaps="false"
-            android:backgroundTint="#E53935" />
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </LinearLayout>
