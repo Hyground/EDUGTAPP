@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -119,6 +118,20 @@ class RegistrarActividadActivity : AppCompatActivity() {
                 val fondo = view.background?.mutate() as? GradientDrawable
                 fondo?.setColor(color)
 
+                val btnActualizar = view.findViewById<Button>(R.id.btnActualizarActividad)
+                val btnEliminar = view.findViewById<Button>(R.id.btnEliminarActividad)
+                val btnCalificar = view.findViewById<Button>(R.id.btnCalificarActividad)
+
+                // Asegurar que los botones reciban los clics correctamente
+                btnActualizar.isFocusable = false
+                btnActualizar.isClickable = true
+
+                btnEliminar.isFocusable = false
+                btnEliminar.isClickable = true
+
+                btnCalificar.isFocusable = false
+                btnCalificar.isClickable = true
+
                 view.setOnClickListener {
                     itemExpandido = if (itemExpandido == position) -1 else position
                     formulario.visibility = View.GONE
@@ -126,7 +139,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
                     notifyDataSetChanged()
                 }
 
-                view.findViewById<Button>(R.id.btnActualizarActividad).setOnClickListener {
+                btnActualizar.setOnClickListener {
                     cargarFormularioDesdeActividad(actividad)
                     indexEnEdicion = position
                     itemExpandido = -1
@@ -135,7 +148,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
                     notifyDataSetChanged()
                 }
 
-                view.findViewById<Button>(R.id.btnEliminarActividad).setOnClickListener {
+                btnEliminar.setOnClickListener {
                     val id = actividad["id"]?.toIntOrNull()
                     if (id != null) {
                         ActividadService.eliminarActividad(id) {
@@ -152,7 +165,7 @@ class RegistrarActividadActivity : AppCompatActivity() {
                     }
                 }
 
-                view.findViewById<Button>(R.id.btnCalificarActividad).setOnClickListener {
+                btnCalificar.setOnClickListener {
                     val id = actividad["id"]?.toIntOrNull()
                     val nombre = actividad["nombre"] ?: ""
                     val cursoId = selectedCursoId
